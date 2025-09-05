@@ -15,8 +15,8 @@ export type SuccessMiddleware = (
   message: string
 ) => void;
 
-export type ControllerMiddleware = (
+export type MiddlewareFn = (
   req: Request,
   res: Response,
   next: NextFunction
-) => void;
+) => Promise<void>;
