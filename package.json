@@ -10,9 +10,12 @@
   "author": "Renyel Jay Sioc",
   "license": "ISC",
   "dependencies": {
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "^24.3.0",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
+    "express-validator": "^7.2.1",
     "mongoose": "^8.18.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
