@@ -1,5 +1,9 @@
 import UserRepository from "./repository";
+import UserDetailsRepository from "../user_details/repository";
 
 export default class UserService {
-  constructor(userRepository: UserRepository) {}
+  constructor(
+    private userRepository: UserRepository,
+    private userDetailsRepository: UserDetailsRepository
+  ) {}
 }
