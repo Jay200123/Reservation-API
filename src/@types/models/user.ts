@@ -17,4 +17,4 @@ export type UserDetails = {
   updatedAt: Date;
 };
 
-export type UserType = Users & UserDetails;
+export type UserType = Users & Omit<UserDetails, "user">; //Here we are omitting user field from UserDetails because it is already present in Users as _id field.
