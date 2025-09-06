@@ -28,6 +28,11 @@ const UserDetailsSchema = new mongoose.Schema<UserDetails>({
     required: true,
   },
 
+  city: {
+    type: String,
+    required: true,
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,
