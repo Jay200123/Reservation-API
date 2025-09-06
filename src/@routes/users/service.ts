@@ -13,6 +13,7 @@ export default class UserService {
   async getAllUsers() {
     const result = await this.userRepository.getAll();
 
+    // Check if users exist
     if (!result.length) {
       throw new ErrorHandler(404, "No users found");
     }
@@ -21,16 +22,19 @@ export default class UserService {
   }
 
   async getUserById(user_id: string) {
-    if (user_id == ":id") {
-      throw new ErrorHandler(400, "Invalid user ID");
+    // Check if user_id is provided
+    if (user_id == ":user_id") {
+      throw new ErrorHandler(400, "Missing user ID");
     }
 
+    // Validate user_id format
     if (!mongoose.Types.ObjectId.isValid(user_id)) {
       throw new ErrorHandler(400, "Invalid user ID");
     }
 
     const result = await this.userRepository.getById(user_id);
 
+    // Check if user exists
     if (!result) {
       throw new ErrorHandler(404, "User not found");
     }
@@ -73,6 +77,7 @@ export default class UserService {
           email: data.email,
           contact_number: data.contact_number,
           address: data.address,
+          city: data.city,
         },
         { session }
       );
@@ -92,7 +97,19 @@ export default class UserService {
   }
 
   async updateUser(id: string, data: Partial<UserType>) {
-    return this.userRepository.updateById(id, data);
+    const user = await this.userRepository.getById(id);
+
+    if (id == ":user_id") {
+      throw new ErrorHandler(400, "Missing user ID");
+    }
+
+    if (!user) {
+      throw new ErrorHandler(404, "User not found");
+    }
+
+    const result = await this.userRepository.updateById(id, data);
+
+    return result;
   }
 
   async deleteUser(id: string) {
