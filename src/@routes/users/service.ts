@@ -12,19 +12,24 @@ export default class UserService {
 
   async getAllUsers() {
     const result = await this.userRepository.getAll();
+
+    if (!result) {
+      throw new ErrorHandler(404, "No users found");
+    }
+
     return result;
   }
 
-  async getUserById(id: string) {
-    if (id == ":id") {
+  async getUserById(user_id: string) {
+    if (user_id == ":id") {
       throw new ErrorHandler(400, "Invalid user ID");
     }
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(user_id)) {
       throw new ErrorHandler(400, "Invalid user ID");
     }
 
-    const result = await this.userRepository.getById(id);
+    const result = await this.userRepository.getById(user_id);
 
     if (!result) {
       throw new ErrorHandler(404, "User not found");
@@ -91,6 +96,18 @@ export default class UserService {
   }
 
   async deleteUser(id: string) {
-    return this.userRepository.deleteById(id);
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new ErrorHandler(400, "Invalid user ID");
+    }
+
+    const user = await this.userRepository.getById(id);
+
+    if (!user) {
+      throw new ErrorHandler(404, "User not found");
+    }
+
+    const result = await this.userRepository.deleteById(id);
+
+    return result;
   }
 }
