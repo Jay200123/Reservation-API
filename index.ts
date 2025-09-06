@@ -39,8 +39,8 @@ app.all("/*splat", (req: Request, res: Response) => {
  */
 const errorMiddleware = new ErrorMiddleware();
 
-app.use(errorMiddleware.errorJson.bind(errorMiddleware));
-app.use(errorMiddleware.errorHandler.bind(errorMiddleware));
+// app.use(errorMiddleware.errorJson());
+app.use(errorMiddleware.errorHandler());
 
 /**
  * Start the server only after the database connection is established
