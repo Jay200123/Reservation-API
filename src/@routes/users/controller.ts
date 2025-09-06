@@ -1,6 +1,6 @@
 import UserService from "./service";
 import { MiddlewareFn } from "../../@types";
-import { SuccessHandler, logger } from "../../@utils";
+import { SuccessHandler, logger, valdiateFields } from "../../@utils";
 import { STATUSCODE } from "../../@constants";
 
 export default class UserController {
@@ -49,9 +49,10 @@ export default class UserController {
       },
     });
 
-    const result = await this.userService.createUser({
-      ...req.body,
-    });
+    // Validate request fields
+    valdiateFields(req);
+
+    const result = await this.userService.createUser(req.body);
 
     logger.info({
       CREATE_USER_RESPONSE: {
