@@ -1,5 +1,37 @@
 import { body } from "express-validator";
 
 export const createUserValidation = [
-    
+  body("username")
+    .trim() // trim from express-validator removes leading and trailing whitespace ex. "  username  " becomes "username"
+    .escape() // escape from express-validator replaces <, >, &, ', " and / with their corresponding HTML entities
+    .notEmpty()
+    .withMessage("username is required"),
+  body("email")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("email required")
+    .bail()
+    .isEmail()
+    .withMessage("Email is invalid"),
+  body("password")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("Password is required")
+    .bail()
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters long"),
+  body("fullname")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("fullname is required"),
+  body("contact_number")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("contact_number is required"),
+  body("address").trim().escape().notEmpty().withMessage("address is required"),
+  body("city").trim().escape().notEmpty().withMessage("city is required"),
 ];
