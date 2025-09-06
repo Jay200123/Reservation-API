@@ -6,7 +6,7 @@ import { STATUSCODE } from "../../@constants";
 export default class UserController {
   constructor(private userService: UserService) {}
 
-  getAllUsers: MiddlewareFn = async (req, res) => {
+  getAllUsers: MiddlewareFn = async (req, res, next) => {
     logger.info({
       GET_ALL_USERS_REQUEST: {
         message: "SUCCESS",
@@ -24,7 +24,7 @@ export default class UserController {
     return SuccessHandler(res, STATUSCODE.SUCCESS, result, "Success");
   };
 
-  getUserById: MiddlewareFn = async (req, res) => {
+  getUserById: MiddlewareFn = async (req, res, next) => {
     logger.info({
       GET_USER_BY_ID_REQUEST: {
         message: "SUCCESS",
@@ -42,7 +42,7 @@ export default class UserController {
     return SuccessHandler(res, STATUSCODE.SUCCESS, result, "Success");
   };
 
-  createUser: MiddlewareFn = async (req, res) => {
+  createUser: MiddlewareFn = async (req, res, next) => {
     logger.info({
       CREATE_USER_REQUEST: {
         message: "SUCCESS",
