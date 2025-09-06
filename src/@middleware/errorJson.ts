@@ -8,24 +8,25 @@ import { ErrorHandler } from "../@utils";
  * @method errorHandler - Middleware to send JSON error responses
  */
 export class ErrorMiddleware {
-  /**
-   * @returns {ErrorMiddlewareFn} Middleware function to handle errors
-   * @description This middleware checks if the error is an instance of ErrorHandler. If not, it converts it to an ErrorHandler with a 500 status code and passes it to the next middleware.
-   */
-  errorJson(): ErrorMiddlewareFn {
-    return (err, req, res, next) => {
-      if (!(err instanceof ErrorHandler)) {
-        // if the err.message is not a string, set it to "Internal Server Error"
-        const message =
-          typeof err === "object" && err !== null && "message" in err
-            ? (err as any).message
-            : "Internal Server Error";
+  // /**
+  //  * @returns {ErrorMiddlewareFn} Middleware function to handle errors
+  //  * @description This middleware checks if the error is an instance of ErrorHandler. If not, it converts it to an ErrorHandler with a 500 status code and passes it to the next middleware.
+  //  */
+  // errorJson(): ErrorMiddlewareFn {
+  //   return (err, req, res, next) => {
+  //     if (!(err instanceof ErrorHandler)) {
+  //       // if the err.message is not a string, set it to "Internal Server Error"
+  //       const message =
+  //         typeof err === "object" && err !== null && "message" in err
+  //           ? (err as any).message
+  //           : "Internal Server Error";
 
-        err = new ErrorHandler(500, message);
-        next(err);
-      }
-    };
-  }
+  //       err = new ErrorHandler(500, message);
+
+  //       return next(err);
+  //     }
+  //   };
+  // }
 
   /**
    *
