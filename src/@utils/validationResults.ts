@@ -1,6 +1,7 @@
 import { ResultFactory, validationResult } from "express-validator";
 import { ErrorHandler } from "./handlers";
 import { STATUSCODE } from "../@constants";
+import { Request } from "express";
 
 /**
  * A customized validation result factory that formats errors to return only the error message as a string.
