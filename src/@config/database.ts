@@ -16,8 +16,6 @@ export class Database {
     } catch (error) {
       logger.error("Mongoose database connection error:", error);
       process.exit(1); // Exit the process with a failure code
-    } finally {
-      await mongoose.connection.close(); // Ensure the connection is closed after the operation
     }
   }
 }
