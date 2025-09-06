@@ -3,7 +3,7 @@ export const PATH = {
   REGISTER: "/register",
   LOGIN: "/login",
   LOGOUT: "/logout",
-  GET_ALL_USERS: "/users",
+  GET_ALL_USERS: "/users/all",
   GET_USER_BY_USER_ID: "/users/:user_id",
   UPDATE_USER_BY_USER_ID: "/user/edit/:user_id",
 };
