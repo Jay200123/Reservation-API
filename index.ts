@@ -3,11 +3,17 @@ import dotenv from "dotenv";
 import { Database } from "./src/@config";
 import { logger } from "./src/@utils";
 import { ErrorMiddleware } from "./src/@middleware";
+import { PATH } from "./src/@constants";
+import { users } from "./src/@routes";
 import mongoose from "mongoose";
 
 dotenv.config();
 const app = express();
 
+/**
+ * Calls the Database object with the `connect` method to establish a connection
+ * to the MongoDB database using the connection string from environment variables.
+ */
 Database.connect(process.env.DATABASE_URI as string);
 
 app.get("/", (req: Request, res: Response) => {
@@ -17,7 +23,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Set up the base route for all API v1 endpoints
-// app.use("/api/v1")
+app.use(PATH.API, users);
 
 app.all("/*splat", (req: Request, res: Response) => {
   return res.status(405).json({
