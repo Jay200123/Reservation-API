@@ -13,6 +13,7 @@ export type UserDetails = {
   email: string;
   contact_number: string;
   address: string;
+  city: string;
   createdAt: Date;
   updatedAt: Date;
 };
