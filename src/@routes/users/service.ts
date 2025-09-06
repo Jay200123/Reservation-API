@@ -13,7 +13,7 @@ export default class UserService {
   async getAllUsers() {
     const result = await this.userRepository.getAll();
 
-    if (!result) {
+    if (!result.length) {
       throw new ErrorHandler(404, "No users found");
     }
 
