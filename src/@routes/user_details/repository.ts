@@ -17,9 +17,11 @@ export default class UserDetailsRepository {
     return await this.userDetailsModel.create([data], options);
   }
 
-  updateById(id: string, data: Partial<UserDetails>) {
-    return this.userDetailsModel.findByIdAndUpdate(
-      id,
+  updateById(user_id: string, data: Partial<UserDetails>) {
+    return this.userDetailsModel.findOneAndUpdate(
+      {
+        user: user_id,
+      },
       {
         ...data,
         updatedAt: new Date(),
