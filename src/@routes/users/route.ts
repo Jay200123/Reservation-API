@@ -6,6 +6,7 @@ import UserService from "./service";
 import UserController from "./controller";
 import UserDetailsModel from "../user_details/model";
 import UserDetailsRepository from "../user_details/repository";
+import { createUserValidation } from "../../@validations";
 
 const router = express.Router();
 
@@ -20,15 +21,12 @@ const userController = new UserController(userService);
 // Set up routes for /users endpoint
 
 //get all users endpoint
-router.get(PATH.GET_ALL_USERS, userController.getAllUsers.bind(userController));
+router.get(PATH.GET_ALL_USERS, userController.getAllUsers);
 
 // get user by id endpoint
-router.get(
-  PATH.GET_USER_BY_USER_ID,
-  userController.getUserById.bind(userController)
-);
+router.get(PATH.GET_USER_BY_USER_ID, userController.getUserById);
 
 //create user endpoint
-router.post(PATH.REGISTER, userController.createUser.bind(userController));
+router.post(PATH.REGISTER, createUserValidation, userController.createUser);
 
 export default router;
