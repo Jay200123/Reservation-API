@@ -24,9 +24,13 @@ const myValidationResult: ResultFactory<string> = validationResult.withDefaults(
 export const valdiateFields = (req: Request) => {
   const errors = myValidationResult(req).array();
 
-  console.log(errors);
-
+  /**
+   * If `errors` contains any entries, an error will be thrown.
+   * By default, `errors` is an array of error messages returned by the `myValidationResult` function.
+   * Using JavaScript's built-in `Array.prototype.join` method, the array of error messages
+   * is converted into a single string, with each message separated by a comma and a space (", ").
+   */
   if (errors.length > 0) {
-    throw new ErrorHandler(STATUSCODE.UNPROCESSABLE_ENTITY, errors[0]);
+    throw new ErrorHandler(STATUSCODE.UNPROCESSABLE_ENTITY, errors.join(", "));
   }
 };
