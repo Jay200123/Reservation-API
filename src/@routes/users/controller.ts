@@ -62,4 +62,25 @@ export default class UserController {
 
     return SuccessHandler(res, STATUSCODE.CREATED, result, "Success");
   };
+
+  updateUser: MiddlewareFn = async (req, res, next) => {
+    logger.info({
+      UPDATE_USER_REQUEST: {
+        message: "Success",
+      },
+    });
+
+    const result = await this.userService.updateUser(
+      req.params.user_id,
+      req.body
+    );
+
+    logger.info({
+      UPDATE_USER_RESPONSE: {
+        message: "Success",
+      },
+    });
+
+    return SuccessHandler(res, STATUSCODE.SUCCESS, result, "Success");
+  };
 }
