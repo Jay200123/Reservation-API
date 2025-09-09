@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { Database } from "./src/@config";
-import { logger } from "./src/@utils";
+import { logger, hashPassword } from "./src/@utils";
 import { ErrorMiddleware } from "./src/@middleware";
 import { PATH } from "./src/@constants";
 import { users } from "./src/@routes";
@@ -15,6 +15,19 @@ const app = express();
  * to the MongoDB database using the connection string from environment variables.
  */
 Database.connect(process.env.DATABASE_URI as string);
+
+/**
+ * Middleware to parse incoming JSON payloads.
+ * Required for handling requests with "Content-Type: application/json"
+ **/
+app.use(express.json());
+
+/**
+ * Middleware to parse URL-encoded payloads (e.g., from HTML forms).
+ * Allows the server to handle form submissions from the frontend.
+ * "extended: true" enables parsing of nested objects.
+ **/
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req: Request, res: Response) => {
   return res.status(200).json({
