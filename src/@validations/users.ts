@@ -13,15 +13,15 @@ export const createUserValidation = [
     .withMessage("email required")
     .bail()
     .isEmail()
-    .withMessage("Email is invalid"),
+    .withMessage("email is invalid"),
   body("password")
     .trim()
     .escape()
     .notEmpty()
-    .withMessage("Password is required")
+    .withMessage("password is required")
     .bail()
     .isLength({ min: 6 })
-    .withMessage("Password must be at least 6 characters long"),
+    .withMessage("password must be at least 6 characters long"),
   body("fullname")
     .trim()
     .escape()
