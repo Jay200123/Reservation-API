@@ -6,27 +6,54 @@ import UserService from "./service";
 import UserController from "./controller";
 import UserDetailsModel from "../user_details/model";
 import UserDetailsRepository from "../user_details/repository";
+import Settings from "../settings/model";
+import { SettingsRepository } from "../settings/repository";
 import { createUserValidation } from "../../@validations";
+import { AuthMiddleware } from "../../@middleware";
 
 const router = express.Router();
 
 // Initialize repositories, services, and controllers
+
+// Injects User on UserRepository - for calling queries related on users.
+// Injects UserDetailsModel - for calling queries related on user_details collection.
 const userDetailsRepository = new UserDetailsRepository(UserDetailsModel);
 const userRepository = new UserRepository(User);
 
 // User Service depends on both UserRepository and UserDetailsRepository
 const userService = new UserService(userRepository, userDetailsRepository);
+//UserController depends on userService.
 const userController = new UserController(userService);
+
+const settingsRepository = new SettingsRepository(Settings);
+const authMiddleware = new AuthMiddleware(settingsRepository);
 
 // Set up routes for /users endpoint
 
 //get all users endpoint
-router.get(PATH.GET_ALL_USERS, userController.getAllUsers);
+router.get(
+  PATH.GET_ALL_USERS,
+  authMiddleware.BasicAuthenticationVerifier(),
+  userController.getAllUsers
+);
 
 // get user by id endpoint
-router.get(PATH.GET_USER_BY_USER_ID, userController.getUserById);
+router.get(
+  PATH.GET_USER_BY_USER_ID,
+  authMiddleware.BasicAuthenticationVerifier(),
+  userController.getUserById
+);
 
 //create user endpoint
-router.post(PATH.REGISTER, createUserValidation, userController.createUser);
+router.post(
+  PATH.REGISTER,
+  authMiddleware.BasicAuthenticationVerifier(),
+  createUserValidation,
+  userController.createUser
+);
+
+
+//upate user endpoint
+router.patch(PATH.UPDATE_USER_BY_USER_ID, userController.updateUser);
 
 export default router;
