@@ -1,7 +1,12 @@
 import UserRepository from "./repository";
 import UserDetailsRepository from "../user_details/repository";
 import { UserType } from "../../@types";
-import { ErrorHandler, hashPassword } from "../../@utils";
+import {
+  ErrorHandler,
+  hashPassword,
+  createUserFields,
+  verifyFields,
+} from "../../@utils";
 import mongoose from "mongoose";
 
 export default class UserService {
@@ -10,6 +15,10 @@ export default class UserService {
     private userDetailsRepository: UserDetailsRepository
   ) {}
 
+  /**
+   * Retrieve all user records from the database.
+   * @returns result
+   */
   async getAllUsers() {
     const result = await this.userRepository.getAll();
 
@@ -21,6 +30,10 @@ export default class UserService {
     return result;
   }
 
+  /**
+   * Retrieve specific user using user_id
+   * @returns result
+   */
   async getUserById(user_id: string) {
     // Check if user_id is provided
     if (user_id == ":user_id") {
@@ -42,7 +55,18 @@ export default class UserService {
     return result;
   }
 
+  /**
+   * Insert user & user_details information in the database.
+   * @returns result
+   */
   async createUser(data: UserType) {
+    /**
+     * Verifies that all required fields exist in the given data object, if an unknown field exists it will throw an Error
+     * @param fields - An array of required field names to check (e.g. createUserFields).
+     * @param data - The object to validate, typically req.body.
+     */
+    verifyFields(createUserFields, data);
+
     //Hash password before saving to database
     const hashedPassword = await hashPassword(data.password);
 
@@ -82,6 +106,8 @@ export default class UserService {
         { session }
       );
 
+      await session.commitTransaction();
+
       return {
         ...result,
         details: {
@@ -89,13 +115,19 @@ export default class UserService {
         },
       };
     } catch (err) {
-      session.abortTransaction();
+      await session.abortTransaction();
       throw err;
     } finally {
-      session.endSession();
+      await session.endSession();
     }
   }
 
+  /**
+   * Update user details
+   * @param id - user id
+   * @param data  - user details
+   * @returns result
+   */
   async updateUser(id: string, data: Partial<UserType>) {
     const user = await this.userRepository.getById(id);
 
