@@ -8,7 +8,6 @@ import UserDetailsModel from "../user_details/model";
 import UserDetailsRepository from "../user_details/repository";
 import Settings from "../settings/model";
 import { SettingsRepository } from "../settings/repository";
-import { createUserValidation } from "../../@validations";
 import { AuthMiddleware } from "../../@middleware";
 
 const router = express.Router();
@@ -42,14 +41,6 @@ router.get(
   PATH.GET_USER_BY_USER_ID,
   authMiddleware.BasicAuthenticationVerifier(),
   userController.getUserById
-);
-
-//create user endpoint
-router.post(
-  PATH.REGISTER,
-  authMiddleware.BasicAuthenticationVerifier(),
-  createUserValidation,
-  userController.createUser
 );
 
 //upate user endpoint
