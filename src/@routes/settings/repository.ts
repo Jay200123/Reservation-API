@@ -1,7 +1,7 @@
 import { Settings } from "../../@types";
 import { Model } from "mongoose";
 
-export class SettingsRepository {
+export default class SettingsRepository {
   constructor(private settingsModel: Model<Settings>) {}
 
   async getByUsername(username: string) {
