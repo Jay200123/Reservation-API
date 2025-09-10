@@ -52,7 +52,6 @@ router.post(
   userController.createUser
 );
 
-
 //upate user endpoint
 router.patch(PATH.UPDATE_USER_BY_USER_ID, userController.updateUser);
 
