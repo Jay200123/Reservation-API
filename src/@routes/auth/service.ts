@@ -3,6 +3,8 @@ import {
   hashPassword,
   verifyFields,
   createUserFields,
+  logger,
+  JWT,
 } from "../../@utils";
 import AuthRepository from "./repository";
 import UserRepository from "../users/repository";
@@ -10,12 +12,14 @@ import UserDetailsRepository from "../user_details/repository";
 import { STATUSCODE } from "../../@constants";
 import { Users, UserType } from "../../@types";
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
 export default class AuthService {
   constructor(
     private authRepository: AuthRepository,
     private userRepository: UserRepository,
-    private userDetailsRepository: UserDetailsRepository
+    private userDetailsRepository: UserDetailsRepository,
+    private jwtUtils: JWT
   ) {}
 
   /**
@@ -30,6 +34,15 @@ export default class AuthService {
      * @param data - The object to validate, typically req.body.
      */
     verifyFields(createUserFields, data);
+
+    const user = await this.userRepository.getByUsername(data.username);
+
+    if (user) {
+      throw new ErrorHandler(
+        STATUSCODE.BAD_REQUEST,
+        "username already exists."
+      );
+    }
 
     //Hash password before saving to database
     const hashedPassword = await hashPassword(data.password);
@@ -86,9 +99,38 @@ export default class AuthService {
     }
   }
 
-  loginUser(data: Omit<Users, "createdAt" | "updatedAt">) {}
+  async loginUser(data: Omit<Users, "createdAt" | "updatedAt">) {
+    const user = await this.userRepository.getByUsername(data.username);
 
-  refreshCredentialsByUser() {}
+    if (!user) {
+      throw new ErrorHandler(
+        STATUSCODE.BAD_REQUEST,
+        "Invalid email or password"
+      );
+    }
 
-  logoutUser() {}
+    // Checks if the plain text password from the request body matches the hashed password from the database.
+    const isMatch = await bcrypt.compare(data.password, user.password);
+
+    if (isMatch) {
+      throw new ErrorHandler(
+        STATUSCODE.BAD_REQUEST,
+        "Invalid email or password"
+      );
+    }
+
+    const access_token = this.jwtUtils.generateAccessToken(user);
+
+    const refresh_token = this.jwtUtils.generateRefreshToken(user);
+
+    return {
+      user: user,
+      access_token: access_token,
+      refresh_token: refresh_token,
+    };
+  }
+
+  async refreshCredentialsByUser() {}
+
+  async logoutUser() {}
 }
