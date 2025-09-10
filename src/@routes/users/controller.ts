@@ -42,27 +42,6 @@ export default class UserController {
     return SuccessHandler(res, STATUSCODE.SUCCESS, result, "Success");
   };
 
-  createUser: MiddlewareFn = async (req, res, next) => {
-    logger.info({
-      CREATE_USER_REQUEST: {
-        message: "SUCCESS",
-      },
-    });
-
-    // Validate request fields
-    valdiateFields(req);
-
-    const result = await this.userService.createUser(req.body);
-
-    logger.info({
-      CREATE_USER_RESPONSE: {
-        message: "SUCCESS",
-      },
-    });
-
-    return SuccessHandler(res, STATUSCODE.CREATED, result, "Success");
-  };
-
   updateUser: MiddlewareFn = async (req, res, next) => {
     logger.info({
       UPDATE_USER_REQUEST: {
