@@ -123,6 +123,21 @@ export default class AuthService {
 
     const refresh_token = this.jwtUtils.generateRefreshToken(user);
 
+    const credentials = await this.authRepository.addCredential({
+      user: user._id,
+      access_token: access_token,
+      refresh_token: refresh_token,
+    });
+
+    if (!credentials) {
+      logger.info({
+        LOGIN_USER_ERROR: {
+          message: "Failed to store user credentials.",
+        },
+      });
+      throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Invalid Request");
+    }
+
     return {
       user: user,
       access_token: access_token,
