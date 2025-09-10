@@ -1,7 +1,7 @@
 import { Model } from "mongoose";
 import { UserCredentials } from "../../@types";
 
-export class AuthRepository {
+export default class AuthRepository {
   constructor(private userCredentialModel: Model<UserCredentials>) {}
 
   async getOneByAccessToken(access_token: string) {
