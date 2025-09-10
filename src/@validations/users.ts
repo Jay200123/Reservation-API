@@ -35,3 +35,19 @@ export const createUserValidation = [
   body("address").trim().escape().notEmpty().withMessage("address is required"),
   body("city").trim().escape().notEmpty().withMessage("city is required"),
 ];
+
+export const loginUserValidation = [
+  body("username")
+    .trim() // trim from express-validator removes leading and trailing whitespace ex. "  username  " becomes "username"
+    .escape() // escape from express-validator replaces <, >, &, ', " and / with their corresponding HTML entities
+    .notEmpty()
+    .withMessage("username is required"),
+  body("password")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("password is required")
+    .bail()
+    .isLength({ min: 6 })
+    .withMessage("password must be at least 6 characters long"),
+];
