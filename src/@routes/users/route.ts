@@ -7,7 +7,7 @@ import UserController from "./controller";
 import UserDetailsModel from "../user_details/model";
 import UserDetailsRepository from "../user_details/repository";
 import Settings from "../settings/model";
-import { SettingsRepository } from "../settings/repository";
+import SettingsRepository from "../settings/repository";
 import { AuthMiddleware } from "../../@middleware";
 
 const router = express.Router();
