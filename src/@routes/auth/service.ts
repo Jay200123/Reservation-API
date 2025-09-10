@@ -135,6 +135,7 @@ export default class AuthService {
           message: "Failed to store user credentials.",
         },
       });
+
       throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Invalid Request");
     }
 
@@ -145,7 +146,47 @@ export default class AuthService {
     };
   }
 
-  async refreshCredentialsByUser() {}
+  async refreshCredentialsByUser(refresh_token: string) {
+    const credentials = await this.authRepository.getOneByRefreshToken(
+      refresh_token
+    );
+
+    if (!credentials) {
+      logger.info({
+        USER_REFRESH_TOKEN_ERROR: {
+          message: "Credentials not found.",
+        },
+      });
+
+      throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized");
+    }
+
+    const user = await this.userRepository.getById(
+      credentials?.user.toString()
+    );
+
+    const mockPayload = {
+      ...user,
+    };
+
+    const newAccessToken = this.jwtUtils.generateAccessToken(mockPayload);
+
+    const newRefreshToken = this.jwtUtils.generateRefreshToken(mockPayload);
+
+    const result = await this.authRepository.updateCredential(refresh_token, {
+      access_token: newAccessToken,
+      refresh_token: newRefreshToken,
+    });
+
+    if (!result) {
+      throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized.");
+    }
+
+    return {
+      access_token: newAccessToken,
+      refresh_token: newRefreshToken,
+    };
+  }
 
   async logoutUser() {}
 }
