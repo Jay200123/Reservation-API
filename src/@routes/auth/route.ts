@@ -11,26 +11,35 @@ import AuthService from "./service";
 import AuthController from "./controller";
 import { PATH } from "../../@constants";
 import { AuthMiddleware } from "../../@middleware";
-import { createUserValidation } from "../../@validations";
+import { JWT } from "../../@utils";
+import { createUserValidation, loginUserValidation } from "../../@validations";
 
 const router = express.Router();
 
-//* Repositories Layer
+//for accessing jwt token methods.
+const jwtUtils = new JWT();
+
+// Repositories Layer*
 const authRepository = new AuthRepository(UserCredentials);
 const userRepository = new UserRepository(User);
 const userDetailsRepository = new UserDetailsRepository(UserDetails);
 const settingsRepository = new SettingsRepository(Settings);
 
+// Service Layer*
 const authService = new AuthService(
   authRepository,
   userRepository,
-  userDetailsRepository
+  userDetailsRepository,
+  jwtUtils
 );
 
+// Controller Layer*
 const authController = new AuthController(authService);
 //create a new Auth middleware instance to access BasicAuthenticationVerifier & AccessTokenVerifier,
 //  methods for adding Basic & Authenticated middleware in the routes.
 const authMiddleware = new AuthMiddleware(settingsRepository);
+
+// Route endpoints*
 
 //register user endpoint.
 router.post(
@@ -38,5 +47,13 @@ router.post(
   authMiddleware.BasicAuthenticationVerifier(),
   createUserValidation,
   authController.registerUser
+);
+
+//login user endpoint.
+router.post(
+  PATH.LOGIN,
+  authMiddleware.BasicAuthenticationVerifier(),
+  loginUserValidation,
+  authController.loginUser
 );
 export default router;
