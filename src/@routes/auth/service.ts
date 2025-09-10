@@ -8,17 +8,21 @@ import AuthRepository from "./repository";
 import UserRepository from "../users/repository";
 import UserDetailsRepository from "../user_details/repository";
 import { STATUSCODE } from "../../@constants";
-import { logger } from "../../@utils";
-import { UserType } from "../../@types";
+import { Users, UserType } from "../../@types";
 import mongoose from "mongoose";
 
-export class AuthService {
+export default class AuthService {
   constructor(
     private authRepository: AuthRepository,
     private userRepository: UserRepository,
     private userDetailsRepository: UserDetailsRepository
   ) {}
 
+  /**
+   * Register new User in the System.
+   * @param data - req.body object that contains user information such as username, password fullname etc.
+   * @returns
+   */
   async registerUser(data: UserType) {
     /**
      * Verifies that all required fields exist in the given data object, if an unknown field exists it will throw an Error
@@ -82,7 +86,7 @@ export class AuthService {
     }
   }
 
-  loginUser() {}
+  loginUser(data: Omit<Users, "createdAt" | "updatedAt">) {}
 
   refreshCredentialsByUser() {}
 
