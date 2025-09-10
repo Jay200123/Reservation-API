@@ -15,4 +15,18 @@ export default class AuthRepository {
   async addCredential(data: Omit<UserCredentials, "createdAt" | "updatedAt">) {
     return await this.userCredentialModel.create({ ...data });
   }
+
+  async updateCredential(
+    refresh_token: string,
+    data: Partial<UserCredentials>
+  ) {
+    return await this.userCredentialModel.findOneAndUpdate(
+      { refresh_token: refresh_token },
+      {
+        ...data,
+        updatedAt: Date.now(),
+      },
+      { new: true }
+    );
+  }
 }
