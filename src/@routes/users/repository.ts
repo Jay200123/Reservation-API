@@ -34,6 +34,16 @@ export default class UserRepository {
   }
 
   /**
+   * Retrieved specific user record by userame
+   * @param username - user's registered username.
+   * @returns The user with the specified username, or null if not found
+   * including their details
+   */
+  async getByUsername(username: string) {
+    return await this.userModel.findOne({ username });
+  }
+
+  /**
    * Create a new user in the database
    * @param data User data
    * @returns The created user
