@@ -56,4 +56,12 @@ router.post(
   loginUserValidation,
   authController.loginUser
 );
+
+//refresh token endpoint;
+router.post(
+  PATH.REFRESH,
+  authMiddleware.AccessTokenVerifier(),
+  authController.refreshCredentialsByUser
+);
+
 export default router;
