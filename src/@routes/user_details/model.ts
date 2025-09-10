@@ -43,9 +43,9 @@ const UserDetailsSchema = new mongoose.Schema<UserDetails>({
   },
 });
 
-const UserDetailsModel = mongoose.model<UserDetails>(
+const UserDetails = mongoose.model<UserDetails>(
   RESOURCE.USER_DETAILS,
   UserDetailsSchema
 );
 
-export default UserDetailsModel;
+export default UserDetails;
