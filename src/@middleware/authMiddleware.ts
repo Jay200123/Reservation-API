@@ -1,6 +1,6 @@
 import { MiddlewareFn } from "../@types";
 import { ErrorHandler, logger } from "../@utils";
-import { SettingsRepository } from "../@routes/settings/repository";
+import  SettingsRepository  from "../@routes/settings/repository";
 import { STATUSCODE } from "../@constants";
 import bcrypt from "bcrypt";
 
