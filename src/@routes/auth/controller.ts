@@ -29,4 +29,27 @@ export default class AuthController {
       "User registered successfully"
     );
   };
+
+  loginUser: MiddlewareFn = async (req, res, next) => {
+    logger.info({
+      LOGIN_USER_REQUEST: {
+        message: "SUCCESS",
+      },
+    });
+
+    const result = await this.authService.loginUser(req.body);
+
+    logger.info({
+      LOGIN_USER_RESPONSE: {
+        message: "SUCCESS",
+      },
+    });
+
+    return SuccessHandler(
+      res,
+      STATUSCODE.SUCCESS,
+      result,
+      "User logged in Successfully."
+    );
+  };
 }
