@@ -9,5 +9,7 @@ export const PATH = {
   UPDATE_USER_BY_USER_ID: "/user/edit/:user_id",
   GET_ALL_SERVICES: "/services/all",
   GET_SERVICE_BY_ID: "/service/:service_id",
+  CREATE_SERVICE: "/create/service",
   EDIT_SERVICE_BY_ID: "/service/edit/:service_id",
+  DELETE_SERVICE_BY_ID: "/service/delete/:service_id",
 };
