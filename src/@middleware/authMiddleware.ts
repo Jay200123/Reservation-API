@@ -1,11 +1,16 @@
 import { MiddlewareFn } from "../@types";
-import { ErrorHandler, logger } from "../@utils";
-import  SettingsRepository  from "../@routes/settings/repository";
+import { ErrorHandler, logger, JWT } from "../@utils";
+import SettingsRepository from "../@routes/settings/repository";
+import AuthRepository from "../@routes/auth/repository";
 import { STATUSCODE } from "../@constants";
 import bcrypt from "bcrypt";
 
 export class AuthMiddleware {
-  constructor(private settingsRepository: SettingsRepository) {}
+  constructor(
+    private settingsRepository: SettingsRepository,
+    private authRepository: AuthRepository,
+    private jwtUtils: JWT
+  ) {}
 
   BasicAuthenticationVerifier(): MiddlewareFn {
     return async (req, res, next) => {
@@ -81,8 +86,57 @@ export class AuthMiddleware {
 
   // For Verifying access token attached from headers in the request object.
   AccessTokenVerifier(): MiddlewareFn {
-    return (req, res, next) => {
-      console.log("Access Token!");
+    return async (req, res, next) => {
+      logger.info({
+        ACCESS_TOKEN_VERIFIER_REQUEST: {
+          message: "Success",
+        },
+      });
+
+      const access_token = req.headers["authorization"];
+
+      if (!access_token) {
+        logger.info({
+          ACCESS_TOKEN_VERIFIER_ERROR: {
+            message: "Missing authorization headers.",
+          },
+        });
+
+        throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized.");
+      }
+
+      const credentials = await this.authRepository.getOneByAccessToken(
+        access_token
+      );
+
+      if (!credentials) {
+        logger.info({
+          ACCESS_TOKEN_VERIFIER_ERROR: {
+            message: "Credentials not found",
+          },
+        });
+
+        throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized.");
+      }
+
+      const isTokenValid = this.jwtUtils.verifyAccessToken(access_token);
+
+      if (!isTokenValid) {
+        logger.info({
+          ACCESS_TOKEN_VERIFIER_ERROR: {
+            message: "Invalid Access Token",
+          },
+        });
+
+        throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized.");
+      }
+
+      logger.info({
+        ACCESS_TOKEN_VERIFIER_RESPONSE: {
+          message: "Success",
+        },
+      });
+
       next();
     };
   }
