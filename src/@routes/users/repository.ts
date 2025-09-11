@@ -14,10 +14,13 @@ export default class UserRepository {
    * including their details
    */
   async getAll() {
-    return this.userModel
-      .find()
-      .populate<{ userDetails: UserDetails }>("user_details")
-      .exec();
+    // v1
+    // return await this.userModel
+    //   .find()
+    //   .populate<{ userDetails: UserDetails }>("user_details")
+    //   .exec();
+
+    return await this.userModel.find();
   }
 
   /**
