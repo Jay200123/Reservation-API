@@ -24,7 +24,7 @@ export default class UserService {
 
     // Check if users exist
     if (!result.length) {
-      throw new ErrorHandler(404, "No users found");
+      throw new ErrorHandler(404, "Users not found");
     }
 
     return result;
