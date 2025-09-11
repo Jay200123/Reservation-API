@@ -37,7 +37,11 @@ const authService = new AuthService(
 const authController = new AuthController(authService);
 //create a new Auth middleware instance to access BasicAuthenticationVerifier & AccessTokenVerifier,
 //  methods for adding Basic & Authenticated middleware in the routes.
-const authMiddleware = new AuthMiddleware(settingsRepository);
+const authMiddleware = new AuthMiddleware(
+  settingsRepository,
+  authRepository,
+  new JWT()
+);
 
 // Route endpoints*
 
@@ -58,10 +62,17 @@ router.post(
 );
 
 //refresh token endpoint;
-router.post(
+router.get(
   PATH.REFRESH,
   authMiddleware.AccessTokenVerifier(),
   authController.refreshCredentialsByUser
+);
+
+//logout user endpoint.
+router.post(
+  PATH.LOGOUT,
+  authMiddleware.AccessTokenVerifier(),
+  authController.logoutUser
 );
 
 export default router;
