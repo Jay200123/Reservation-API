@@ -65,13 +65,11 @@ export default class AuthController {
       },
     });
 
-    const headers = req.headers["authorization"];
+    const refresh_token = req.headers["authorization"];
 
-    if (!headers) {
+    if (!refresh_token) {
       return next(new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Invalid Request"));
     }
-
-    const refresh_token = headers.split(", ")[1];
 
     const result = await this.authService.refreshCredentialsByUser(
       refresh_token
@@ -84,5 +82,34 @@ export default class AuthController {
     });
 
     return SuccessHandler(res, STATUSCODE.SUCCESS, result, "Success");
+  };
+
+  logoutUser: MiddlewareFn = async (req, res, next) => {
+    logger.info({
+      LOGOUT_USER_REQUEST: {
+        message: "SUCCESS",
+      },
+    });
+
+    const access_token = req.headers["authorization"];
+
+    if (!access_token) {
+      throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized");
+    }
+
+    const result = await this.authService.logoutUser(access_token);
+
+    logger.info({
+      LOGOUT_USER_RESPONSE: {
+        message: "SUCCESS",
+      },
+    });
+
+    return SuccessHandler(
+      res,
+      STATUSCODE.SUCCESS,
+      result,
+      "Logout successfully"
+    );
   };
 }
