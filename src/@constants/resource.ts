@@ -4,4 +4,5 @@ export const RESOURCE = {
   RESERVATIONS: "reservations",
   SETTINGS: "settings",
   USER_CREDENTIALS: "user_credentials",
+  SERVICES: "services",
 };
