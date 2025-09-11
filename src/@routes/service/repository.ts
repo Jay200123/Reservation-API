@@ -4,13 +4,27 @@ import { Service } from "../../@types";
 export default class ServiceRepository {
   constructor(private serviceModel: Model<Service>) {}
 
-  getAll() {}
+  async getAll() {
+    return await this.serviceModel.find().exec();
+  }
 
-  getById() {}
+  async getById(service_id: string) {
+    return await this.serviceModel.findById(service_id).exec();
+  }
 
-  create() {}
+  async create(data: Omit<Service, "createdAt" | "updatedAt">) {
+    return await this.serviceModel.create({ ...data });
+  }
 
-  updateById() {}
+  async updateById(service_id: string, data: Partial<Service>) {
+    return await this.serviceModel.findByIdAndUpdate(
+      service_id,
+      { ...data },
+      { new: true }
+    );
+  }
 
-  deleteById() {}
+  async deleteById(service_id: string) {
+    return await this.serviceModel.findByIdAndDelete(service_id);
+  }
 }
