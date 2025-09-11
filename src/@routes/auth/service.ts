@@ -103,6 +103,11 @@ export default class AuthService {
     const user = await this.userRepository.getByUsername(data.username);
 
     if (!user) {
+      logger.info({
+        LOGIN_USER_ERROR: {
+          message: "Credentials not found",
+        },
+      });
       throw new ErrorHandler(
         STATUSCODE.BAD_REQUEST,
         "Invalid email or password"
@@ -112,16 +117,22 @@ export default class AuthService {
     // Checks if the plain text password from the request body matches the hashed password from the database.
     const isMatch = await bcrypt.compare(data.password, user.password);
 
-    if (isMatch) {
+    if (!isMatch) {
+      logger.info({
+        LOGIN_USER_ERROR: {
+          message: "Password does not match",
+        },
+      });
+
       throw new ErrorHandler(
         STATUSCODE.BAD_REQUEST,
         "Invalid email or password"
       );
     }
 
-    const access_token = this.jwtUtils.generateAccessToken(user);
+    const access_token = this.jwtUtils.generateAccessToken({ user });
 
-    const refresh_token = this.jwtUtils.generateRefreshToken(user);
+    const refresh_token = this.jwtUtils.generateRefreshToken({ user });
 
     const credentials = await this.authRepository.addCredential({
       user: user._id,
@@ -188,5 +199,37 @@ export default class AuthService {
     };
   }
 
-  async logoutUser() {}
+  async logoutUser(access_token: string) {
+    const credentials = await this.authRepository.getOneByAccessToken(
+      access_token
+    );
+
+    if (!credentials) {
+      logger.info({
+        LOGOUT_USER_ERROR: {
+          message: "Credentials not found.",
+        },
+      });
+
+      throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized");
+    }
+
+    const result = await this.authRepository.removeCredentialsByAccessToken(
+      access_token
+    );
+
+    if (!result) {
+      logger.info({
+        LOGOUT_USER_ERROR: {
+          message: "Removing credentials failed.",
+        },
+      });
+
+      throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized");
+    }
+
+    return {
+      result,
+    };
+  }
 }
