@@ -4,7 +4,7 @@ import { Database } from "./src/@config";
 import { logger, hashPassword } from "./src/@utils";
 import { ErrorMiddleware } from "./src/@middleware";
 import { PATH } from "./src/@constants";
-import { users } from "./src/@routes";
+import { users, auth, service } from "./src/@routes";
 import mongoose from "mongoose";
 
 dotenv.config();
@@ -36,7 +36,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Set up the base route for all API v1 endpoints
-app.use(PATH.API, users);
+app.use(PATH.API, auth, users, service);
 
 app.all("/*splat", (req: Request, res: Response) => {
   return res.status(405).json({
