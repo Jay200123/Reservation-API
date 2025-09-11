@@ -5,9 +5,12 @@ import UserRepository from "./repository";
 import UserService from "./service";
 import UserController from "./controller";
 import UserDetailsModel from "../user_details/model";
+import UserCredentials from "../auth/model";
 import UserDetailsRepository from "../user_details/repository";
 import Settings from "../settings/model";
 import SettingsRepository from "../settings/repository";
+import AuthRepository from "../auth/repository";
+import { JWT } from "../../@utils";
 import { AuthMiddleware } from "../../@middleware";
 
 const router = express.Router();
@@ -25,7 +28,12 @@ const userService = new UserService(userRepository, userDetailsRepository);
 const userController = new UserController(userService);
 
 const settingsRepository = new SettingsRepository(Settings);
-const authMiddleware = new AuthMiddleware(settingsRepository);
+const authRepository = new AuthRepository(UserCredentials);
+const authMiddleware = new AuthMiddleware(
+  settingsRepository,
+  authRepository,
+  new JWT()
+);
 
 // Set up routes for /users endpoint
 
