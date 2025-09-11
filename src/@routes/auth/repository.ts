@@ -29,4 +29,10 @@ export default class AuthRepository {
       { new: true }
     );
   }
+
+  async removeCredentialsByAccessToken(access_token: string) {
+    return await this.userCredentialModel.findOneAndDelete({
+      access_token: access_token,
+    });
+  }
 }
