@@ -16,6 +16,16 @@ export const UserSchema = new Schema<Users>({
     type: String,
     required: true,
   },
+  status: {
+    type: String,
+    enum: ["ACTIVE", "INACTIVE", "PENDING"],
+  },
+
+  role: {
+    type: String,
+    enum: ["USER", "ADMIN"],
+  },
+
   createdAt: {
     type: Date,
     default: Date.now,
