@@ -1,6 +1,6 @@
 import TimeslotService from "./service";
 import { MiddlewareFn } from "../../@types";
-import { logger, SuccessHandler } from "../../@utils";
+import { logger, SuccessHandler, valdiateFields } from "../../@utils";
 import { STATUSCODE } from "../../@constants";
 
 export default class TimeslotController {
@@ -48,6 +48,8 @@ export default class TimeslotController {
         message: "SUCCESS",
       },
     });
+
+    valdiateFields(req);
 
     const result = await this.timeslotService.createTimeslot(req.body);
 
