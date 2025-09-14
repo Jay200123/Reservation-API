@@ -10,6 +10,7 @@ import TimeslotController from "./controller";
 import { AuthMiddleware } from "../../@middleware";
 import { JWT } from "../../@utils";
 import { PATH } from "../../@constants";
+import { createTimeslotValidation } from "../../@validations";
 
 const router = expresss.Router();
 
@@ -46,6 +47,7 @@ router.get(
 router.post(
   PATH.TIMESLOTS,
   authMiddleware.AccessTokenVerifier(),
+  createTimeslotValidation,
   timeslotController.createTimeslot
 );
 
