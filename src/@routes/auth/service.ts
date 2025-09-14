@@ -66,6 +66,8 @@ export default class AuthService {
         {
           username: data.username,
           password: hashedPassword,
+          status: "PENDING",
+          role: "USER",
         },
         { session }
       );
