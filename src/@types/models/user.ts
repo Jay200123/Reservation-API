@@ -1,8 +1,13 @@
 import mongoose from "mongoose";
 
+type UserStatus = "ACTIVE" | "INACTIVE" | "PENDING";
+type UserRole = "USER" | "ADMIN";
+
 export type Users = {
   username: string;
   password: string;
+  status: UserStatus;
+  role: UserRole;
   createdAt: Date;
   updatedAt: Date;
 };
