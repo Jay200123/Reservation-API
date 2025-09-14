@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { Database } from "./src/@config";
-import { logger, hashPassword } from "./src/@utils";
+import { logger } from "./src/@utils";
 import { ErrorMiddleware } from "./src/@middleware";
 import { PATH } from "./src/@constants";
-import { users, auth, service } from "./src/@routes";
+import { users, auth, service, timeslot } from "./src/@routes";
 import mongoose from "mongoose";
 
 dotenv.config();
@@ -36,7 +36,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Set up the base route for all API v1 endpoints
-app.use(PATH.API, auth, users, service);
+app.use(PATH.API, auth, users, service, timeslot);
 
 app.all("/*splat", (req: Request, res: Response) => {
   return res.status(405).json({
