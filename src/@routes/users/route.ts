@@ -4,9 +4,7 @@ import User from "./model";
 import UserRepository from "./repository";
 import UserService from "./service";
 import UserController from "./controller";
-import UserDetailsModel from "../user_details/model";
 import UserCredentials from "../auth/model";
-import UserDetailsRepository from "../user_details/repository";
 import Settings from "../settings/model";
 import SettingsRepository from "../settings/repository";
 import AuthRepository from "../auth/repository";
@@ -18,12 +16,10 @@ const router = express.Router();
 // Initialize repositories, services, and controllers
 
 // Injects User on UserRepository - for calling queries related on users.
-// Injects UserDetailsModel - for calling queries related on user_details collection.
-const userDetailsRepository = new UserDetailsRepository(UserDetailsModel);
 const userRepository = new UserRepository(User);
 
 // User Service depends on both UserRepository and UserDetailsRepository
-const userService = new UserService(userRepository, userDetailsRepository);
+const userService = new UserService(userRepository);
 //UserController depends on userService.
 const userController = new UserController(userService);
 
@@ -39,19 +35,23 @@ const authMiddleware = new AuthMiddleware(
 
 //get all users endpoint
 router.get(
-  PATH.GET_ALL_USERS,
-  authMiddleware.BasicAuthenticationVerifier(),
+  PATH.USERS,
+  authMiddleware.AccessTokenVerifier(),
   userController.getAllUsers
 );
 
 // get user by id endpoint
 router.get(
-  PATH.GET_USER_BY_USER_ID,
-  authMiddleware.BasicAuthenticationVerifier(),
+  PATH.USER_ID,
+  authMiddleware.AccessTokenVerifier(),
   userController.getUserById
 );
 
 //upate user endpoint
-router.patch(PATH.UPDATE_USER_BY_USER_ID, userController.updateUser);
+router.patch(
+  PATH.EDIT_USER_ID,
+  authMiddleware.AccessTokenVerifier(),
+  userController.updateUser
+);
 
 export default router;
