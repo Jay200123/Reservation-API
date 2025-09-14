@@ -3,16 +3,12 @@ import UserDetailsRepository from "../user_details/repository";
 import { UserType } from "../../@types";
 import {
   ErrorHandler,
-  hashPassword,
-  createUserFields,
-  verifyFields,
 } from "../../@utils";
 import mongoose from "mongoose";
 
 export default class UserService {
   constructor(
     private userRepository: UserRepository,
-    private userDetailsRepository: UserDetailsRepository
   ) {}
 
   /**
