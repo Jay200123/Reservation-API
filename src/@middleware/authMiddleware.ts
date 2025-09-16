@@ -105,6 +105,9 @@ export class AuthMiddleware {
         throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized.");
       }
 
+      //verify access token.
+      this.jwtUtils.verifyAccessToken(access_token);
+
       const credentials = await this.authRepository.getOneByAccessToken(
         access_token
       );
@@ -119,12 +122,47 @@ export class AuthMiddleware {
         throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized.");
       }
 
-      const isTokenValid = this.jwtUtils.verifyAccessToken(access_token);
+      logger.info({
+        ACCESS_TOKEN_VERIFIER_RESPONSE: {
+          message: "Success",
+        },
+      });
 
-      if (!isTokenValid) {
+      next();
+    };
+  }
+
+  RefreshTokenVerifier(): MiddlewareFn {
+    return async (req, res, next) => {
+      logger.info({
+        REFRESH_TOKEN_VERIFIER_REQUEST: {
+          message: "SUCCESS",
+        },
+      });
+
+      const refresh_token = req.headers["authorization"];
+
+      if (!refresh_token) {
         logger.info({
-          ACCESS_TOKEN_VERIFIER_ERROR: {
-            message: "Invalid Access Token",
+          REFRESH_TOKEN_VERIFIER_ERROR: {
+            message: "Missing authorization headers.",
+          },
+        });
+
+        throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized.");
+      }
+
+      //verifies if the refresh token is still valid or not.
+      this.jwtUtils.verifyRefreshToken(refresh_token);
+
+      const credentials = await this.authRepository.getOneByRefreshToken(
+        refresh_token
+      );
+
+      if (!credentials) {
+        logger.info({
+          REFRESH_TOKEN_VERIFIER_ERROR: {
+            message: "Credentials not found.",
           },
         });
 
@@ -132,8 +170,8 @@ export class AuthMiddleware {
       }
 
       logger.info({
-        ACCESS_TOKEN_VERIFIER_RESPONSE: {
-          message: "Success",
+        REFRESH_TOKEN_VERIFIER_RESPONSE: {
+          message: "SUCCESS",
         },
       });
 
