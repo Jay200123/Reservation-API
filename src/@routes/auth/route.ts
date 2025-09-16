@@ -64,7 +64,7 @@ router.post(
 //refresh token endpoint;
 router.get(
   PATH.REFRESH,
-  authMiddleware.AccessTokenVerifier(),
+  authMiddleware.RefreshTokenVerifier(),
   authController.refreshCredentialsByUser
 );
 
