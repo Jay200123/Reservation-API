@@ -1,7 +1,9 @@
 import express from "express";
 import { PATH } from "../../@constants";
 import User from "./model";
+import UserDetails from "../user_details/model";
 import UserRepository from "./repository";
+import UserDetailsRepository from "../user_details/repository";
 import UserService from "./service";
 import UserController from "./controller";
 import UserCredentials from "../auth/model";
@@ -18,8 +20,10 @@ const router = express.Router();
 // Injects User on UserRepository - for calling queries related on users.
 const userRepository = new UserRepository(User);
 
+const userDetailsRepository = new UserDetailsRepository(UserDetails);
+
 // User Service depends on both UserRepository and UserDetailsRepository
-const userService = new UserService(userRepository);
+const userService = new UserService(userRepository, userDetailsRepository);
 //UserController depends on userService.
 const userController = new UserController(userService);
 
