@@ -230,8 +230,6 @@ export default class AuthService {
       throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized");
     }
 
-    return {
-      result,
-    };
+    return [];
   }
 }
