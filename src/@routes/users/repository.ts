@@ -30,10 +30,7 @@ export default class UserRepository {
    * including their details
    */
   async getById(id: string) {
-    return this.userModel
-      .findById(id)
-      .populate<{ userDetails: UserDetails }>("user_details")
-      .exec();
+    return this.userModel.findById(id).exec();
   }
 
   /**
