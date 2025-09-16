@@ -31,7 +31,7 @@ export default class UserController {
       },
     });
 
-    const result = await this.userService.getUserById(req.params.user_id);
+    const result = await this.userService.getUserById(req.params.id);
 
     logger.info({
       GET_USER_BY_ID_RESPONSE: {
@@ -50,7 +50,7 @@ export default class UserController {
     });
 
     const result = await this.userService.updateUser(
-      req.params.user_id,
+      req.params.id,
       req.body
     );
 
