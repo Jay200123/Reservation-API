@@ -4,7 +4,12 @@ import { Database } from "./src/@config";
 import { logger } from "./src/@utils";
 import { ErrorMiddleware } from "./src/@middleware";
 import { PATH } from "./src/@constants";
-import { users, auth, service, timeslot } from "./src/@routes";
+import { 
+  users, 
+  auth, 
+  service, 
+  timeslot
+} from "./src/@routes";
 import mongoose from "mongoose";
 
 dotenv.config();
