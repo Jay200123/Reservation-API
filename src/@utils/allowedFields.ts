@@ -5,5 +5,7 @@ export const createUserFields = [
   "email",
   "contact_number",
   "address",
-  "city"
+  "city",
 ];
+
+export const updateUserFields = ["contact_number", "address", "city"];
