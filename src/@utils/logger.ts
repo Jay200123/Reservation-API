@@ -5,8 +5,13 @@ const { combine, timestamp, printf, colorize } = format;
 
 // Custom log format
 const logFormat = printf(({ level, message, timestamp }) => {
-  const formattedMessage =
-    typeof message === "object" ? JSON.stringify(message) : message;
+  let formattedMessage: string;
+
+  if (typeof message === "object") {
+    formattedMessage = JSON.stringify(message, null, 2); // pretty-print
+  } else {
+    formattedMessage = String(message ?? "");
+  }
 
   return `[${timestamp}] ${level}: ${formattedMessage}`;
 });
