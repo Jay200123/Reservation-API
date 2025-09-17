@@ -9,11 +9,12 @@ export const createServiceValidation = [
   body("service_price")
     .trim()
     .escape()
-    .isFloat({ min: 0 })
-    .withMessage("Price must be 0 or greater")
-    .bail()
     .notEmpty()
-    .withMessage("service_price required"),
+    .withMessage("service_price required")
+    .bail()
+    .isFloat({ min: 0 })
+    .withMessage("Price must be 0 or greater"),
+  body("duration").trim().escape().notEmpty().withMessage("duration required"),
   body("description")
     .trim()
     .escape()
