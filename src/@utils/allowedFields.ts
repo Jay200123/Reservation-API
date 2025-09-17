@@ -1,4 +1,4 @@
-export const createUserFields = [
+const createUserFields = [
   "username",
   "password",
   "fullname",
@@ -8,4 +8,13 @@ export const createUserFields = [
   "city",
 ];
 
-export const updateUserFields = ["contact_number", "address", "city"];
+const updateUserFields = ["contact_number", "address", "city"];
+
+const createServiceFields = [
+  "service_name",
+  "service_price",
+  "description",
+  "duration",
+];
+
+export { createUserFields, updateUserFields, createServiceFields };
