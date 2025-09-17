@@ -60,8 +60,6 @@ export default class UserService {
 
     const result = await this.userDetailsRepository.getDetailsByUserId(id);
 
-    console.log({ result });
-
     // Check if user exists
     if (!result) {
       throw new ErrorHandler(404, "Details not found");
@@ -77,7 +75,6 @@ export default class UserService {
    * @returns result
    */
   async updateUser(id: string, data: Partial<UserType>) {
-    console.log({ id });
 
     if (id == ":id") {
       throw new ErrorHandler(400, "Missing user ID");
