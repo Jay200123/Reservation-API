@@ -14,7 +14,6 @@ import mongoose from "mongoose";
 
 dotenv.config();
 const app = express();
-
 /**
  * Calls the Database object with the `connect` method to establish a connection
  * to the MongoDB database using the connection string from environment variables.
