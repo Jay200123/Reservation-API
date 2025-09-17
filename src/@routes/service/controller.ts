@@ -1,6 +1,6 @@
 import ServiceServices from "./service";
 import { MiddlewareFn } from "../../@types";
-import { SuccessHandler, logger } from "../../@utils";
+import { SuccessHandler, logger, valdiateFields } from "../../@utils";
 import { STATUSCODE } from "../../@constants";
 
 export default class ServiceController {
@@ -31,9 +31,7 @@ export default class ServiceController {
       },
     });
 
-    const result = await this.serviceServices.getServiceById(
-      req.params.service_id
-    );
+    const result = await this.serviceServices.getServiceById(req.params.id);
 
     logger.info({
       GET_SERVICE_BY_ID_RESPONSE: {
@@ -50,6 +48,8 @@ export default class ServiceController {
         message: "SUCCESS",
       },
     });
+
+    valdiateFields(req);
 
     const result = await this.serviceServices.createService(req.body);
 
@@ -75,7 +75,7 @@ export default class ServiceController {
     });
 
     const result = await this.serviceServices.updateServiceById(
-      req.params.service_id,
+      req.params.id,
       req.body
     );
 
