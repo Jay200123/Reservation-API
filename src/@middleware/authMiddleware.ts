@@ -105,9 +105,6 @@ export class AuthMiddleware {
         throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized.");
       }
 
-      //verify access token.
-      this.jwtUtils.verifyAccessToken(access_token);
-
       const credentials = await this.authRepository.getOneByAccessToken(
         access_token
       );
@@ -121,6 +118,9 @@ export class AuthMiddleware {
 
         throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized.");
       }
+
+      //verify access token.
+      this.jwtUtils.verifyAccessToken(access_token);
 
       logger.info({
         ACCESS_TOKEN_VERIFIER_RESPONSE: {
@@ -152,9 +152,6 @@ export class AuthMiddleware {
         throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized.");
       }
 
-      //verifies if the refresh token is still valid or not.
-      this.jwtUtils.verifyRefreshToken(refresh_token);
-
       const credentials = await this.authRepository.getOneByRefreshToken(
         refresh_token
       );
@@ -168,6 +165,9 @@ export class AuthMiddleware {
 
         throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized.");
       }
+
+      //verifies if the refresh token is still valid or not.
+      this.jwtUtils.verifyRefreshToken(refresh_token);
 
       logger.info({
         REFRESH_TOKEN_VERIFIER_RESPONSE: {
