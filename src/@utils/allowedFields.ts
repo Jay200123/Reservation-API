@@ -19,9 +19,17 @@ const createServiceFields = [
 
 const createTimeslotFields = ["start_time", "end_time"];
 
+const createReservationFields = [
+  "user",
+  "services",
+  "timeslot",
+  "payment_type",
+  "amount",
+];
 export {
   createUserFields,
   updateUserFields,
   createServiceFields,
   createTimeslotFields,
+  createReservationFields,
 };
