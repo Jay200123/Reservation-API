@@ -8,7 +8,8 @@ import {
   users, 
   auth, 
   service, 
-  timeslot
+  timeslot,
+  reservation
 } from "./src/@routes";
 import mongoose from "mongoose";
 
@@ -40,7 +41,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // Set up the base route for all API v1 endpoints
-app.use(PATH.API, auth, users, service, timeslot);
+app.use(PATH.API, auth, users, service, timeslot, reservation);
 
 app.all("/*splat", (req: Request, res: Response) => {
   return res.status(405).json({
