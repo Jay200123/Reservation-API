@@ -1,7 +1,12 @@
 import mongoose from "mongoose";
 import { STATUSCODE } from "../../@constants";
 import { Timeslot } from "../../@types";
-import { ErrorHandler, logger } from "../../@utils";
+import {
+  ErrorHandler,
+  logger,
+  verifyFields,
+  createTimeslotFields,
+} from "../../@utils";
 import TimeslotRepository from "./repository";
 
 export default class TimeslotService {
@@ -9,6 +14,10 @@ export default class TimeslotService {
 
   async getAllTimeslots() {
     const result = await this.timeslotRepository.getAll();
+
+    if (!result.length) {
+      throw new ErrorHandler(STATUSCODE.NOT_FOUND, "Timeslots not found");
+    }
 
     return result;
   }
@@ -38,6 +47,8 @@ export default class TimeslotService {
   }
 
   async createTimeslot(data: Omit<Timeslot, "createdAt" | "updatedAt">) {
+    verifyFields(createTimeslotFields, data);
+
     const result = await this.timeslotRepository.create(data);
 
     if (!result) {
@@ -72,6 +83,13 @@ export default class TimeslotService {
     if (!timeslot) {
       throw new ErrorHandler(STATUSCODE.NOT_FOUND, "Timeslot not Found");
     }
+
+    /**
+     * Verifies that all required fields exist in the given data object, if an unknown field exists it will throw an Error
+     * @param fields - An array of required field names to check (e.g. createUserFields).
+     * @param data - The object to validate, typically req.body.
+     */
+    verifyFields(createTimeslotFields, data);
 
     const result = await this.timeslotRepository.updateById(id, data);
 
