@@ -5,5 +5,5 @@ export const RESOURCE = {
   SETTINGS: "settings",
   USER_CREDENTIALS: "user_credentials",
   SERVICES: "services",
-  TIMESLOTS: "timeslots"
+  TIMESLOTS: "timeslots",
 };
