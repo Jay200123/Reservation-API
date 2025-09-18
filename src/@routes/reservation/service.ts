@@ -1,6 +1,11 @@
 import mongoose from "mongoose";
 import { STATUSCODE } from "../../@constants";
-import { ErrorHandler, logger } from "../../@utils";
+import {
+  createReservationFields,
+  ErrorHandler,
+  logger,
+  verifyFields,
+} from "../../@utils";
 import ReservationRepository from "./repository";
 import { Reservations } from "../../@types";
 
@@ -41,6 +46,13 @@ export default class ReservationService {
   }
 
   async createReservation(data: Omit<Reservations, "createdAt" | "updatedAt">) {
+    /**
+     * Verifies that all required fields exist in the given data object, if an unknown field exists it will throw an Error
+     * @param fields - An array of required field names to check (e.g. createUserFields).
+     * @param data - The object to validate, typically req.body.
+     */
+    verifyFields(createReservationFields, data);
+    
     const session = await mongoose.startSession();
 
     session.startTransaction();
@@ -62,6 +74,13 @@ export default class ReservationService {
   }
 
   async updateReservationById(id: string, data: Partial<Reservations>) {
+    /**
+     * Verifies that all required fields exist in the given data object, if an unknown field exists it will throw an Error
+     * @param fields - An array of required field names to check (e.g. createUserFields).
+     * @param data - The object to validate, typically req.body.
+     */
+    verifyFields(createReservationFields, data);
+
     if (id == ":id") {
       throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Missing Reservation ID");
     }
