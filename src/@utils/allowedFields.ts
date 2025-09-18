@@ -17,4 +17,11 @@ const createServiceFields = [
   "duration",
 ];
 
-export { createUserFields, updateUserFields, createServiceFields };
+const createTimeslotFields = ["start_time", "end_time"];
+
+export {
+  createUserFields,
+  updateUserFields,
+  createServiceFields,
+  createTimeslotFields,
+};
