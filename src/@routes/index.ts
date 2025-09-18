@@ -15,3 +15,4 @@ export { default as users } from "./users/route";
 export { default as auth } from "./auth/route";
 export { default as service } from "./service/route";
 export { default as timeslot } from "./timeslot/route";
+export { default as reservation } from "./reservation/route";
