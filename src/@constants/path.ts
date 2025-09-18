@@ -13,4 +13,7 @@ export const PATH = {
   TIMESLOTS: "/timeslots",
   TIMESLOT_ID: "/timeslot/:id",
   EDIT_TIMESLOT_ID: "/timeslot/edit/:id",
+  RESERVATIONS: "/reservations",
+  RESERVATION_ID: "/reservation/:id",
+  EDIT_RESERVATION_ID: "/reservation/edit/:id",
 };
