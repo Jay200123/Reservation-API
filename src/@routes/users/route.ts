@@ -50,7 +50,7 @@ router.get(
 router.get(
   PATH.USER_ID,
   authMiddleware.AccessTokenVerifier(),
-  authMiddleware.UserRoleVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.ADMIN),
   userController.getUserById
 );
 
@@ -58,7 +58,7 @@ router.get(
 router.patch(
   PATH.EDIT_USER_ID,
   authMiddleware.AccessTokenVerifier(),
-  authMiddleware.UserRoleVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.ADMIN),
   userController.updateUser
 );
 
