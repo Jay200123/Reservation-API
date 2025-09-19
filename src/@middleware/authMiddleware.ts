@@ -1,4 +1,4 @@
-import { MiddlewareFn } from "../@types";
+import { MiddlewareFn, UserRole } from "../@types";
 import { ErrorHandler, logger, JWT } from "../@utils";
 import SettingsRepository from "../@routes/settings/repository";
 import AuthRepository from "../@routes/auth/repository";
@@ -179,7 +179,7 @@ export class AuthMiddleware {
     };
   }
 
-  UserRoleVerifier(): MiddlewareFn {
+  UserRoleVerifier(...roles: UserRole[]): MiddlewareFn {
     return (req, res, next) => {
       logger.info({
         USER_ROLE_VERIFIER_REQUEST: {
@@ -193,6 +193,14 @@ export class AuthMiddleware {
         access_token as string
       );
 
+      if (!roles || !roles?.includes(verifiedAccessToken.user.role)) {
+        logger.info({
+          USER_ROLE_VERIFIER_ERROR: {
+            message: "Access Denied, User not allowed to access resource.",
+          },
+        });
+        throw new ErrorHandler(STATUSCODE.FORBIDDEN, "Forbidden");
+      }
       logger.info({
         USER_ROLE_VERIFIER_RESPONSE: {
           message: "SUCCESS",
