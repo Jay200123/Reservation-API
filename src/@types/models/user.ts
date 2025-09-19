@@ -4,6 +4,7 @@ type UserStatus = "ACTIVE" | "INACTIVE" | "PENDING";
 type UserRole = "USER" | "ADMIN";
 
 export type Users = {
+  _id?: mongoose.Types.ObjectId;
   username: string;
   password: string;
   status: UserStatus;
