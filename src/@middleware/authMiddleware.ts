@@ -178,4 +178,27 @@ export class AuthMiddleware {
       next();
     };
   }
+
+  UserRoleVerifier(): MiddlewareFn {
+    return (req, res, next) => {
+      logger.info({
+        USER_ROLE_VERIFIER_REQUEST: {
+          message: "SUCCESS",
+        },
+      });
+
+      const access_token = req.headers["authorization"];
+
+      const verifiedAccessToken = this.jwtUtils.verifyAccessToken(
+        access_token as string
+      );
+
+      logger.info({
+        USER_ROLE_VERIFIER_RESPONSE: {
+          message: "SUCCESS",
+        },
+      });
+      next();
+    };
+  }
 }
