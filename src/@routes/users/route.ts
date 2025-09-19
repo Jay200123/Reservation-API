@@ -12,6 +12,7 @@ import SettingsRepository from "../settings/repository";
 import AuthRepository from "../auth/repository";
 import { JWT } from "../../@utils";
 import { AuthMiddleware } from "../../@middleware";
+import { ROLE } from "../../@constants";
 
 const router = express.Router();
 
@@ -41,7 +42,7 @@ const authMiddleware = new AuthMiddleware(
 router.get(
   PATH.USERS,
   authMiddleware.AccessTokenVerifier(),
-  authMiddleware.UserRoleVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.ADMIN),
   userController.getAllUsers
 );
 
