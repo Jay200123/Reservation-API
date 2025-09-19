@@ -31,20 +31,20 @@ export class JWT {
     }
   }
 
-  generateRefreshToken(payload: any) {
+  generateRefreshToken(payload: JWTPayload) {
     return jwt.sign(payload, process.env.JWT_REFRESH_SECRET_KEY as string, {
       expiresIn: "30d",
     });
   }
 
-  verifyRefreshToken(refresh_token: any) {
+  verifyRefreshToken(refresh_token: string): void {
     return jwt.verify(
       refresh_token,
       process.env.JWT_REFRESH_SECRET_KEY as string,
       (err: jwt.VerifyErrors | null, decoded: any) => {
         if (err) {
           logger.info({
-            JWT_REFRESH_TOKEN_VERIFY_ERROR: {
+            JWT_ACCESS_TOKEN_VERIFY_ERROR: {
               message: "Refresh token verification failed.",
               error: err,
             },
@@ -52,6 +52,8 @@ export class JWT {
 
           throw new ErrorHandler(STATUSCODE.UNAUTHORIZED, "Unauthorized");
         }
+
+        return decoded;
       }
     );
   }
