@@ -41,6 +41,7 @@ const authMiddleware = new AuthMiddleware(
 router.get(
   PATH.USERS,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(),
   userController.getAllUsers
 );
 
@@ -48,6 +49,7 @@ router.get(
 router.get(
   PATH.USER_ID,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(),
   userController.getUserById
 );
 
@@ -55,6 +57,7 @@ router.get(
 router.patch(
   PATH.EDIT_USER_ID,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(),
   userController.updateUser
 );
 
