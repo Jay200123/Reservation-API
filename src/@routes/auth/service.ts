@@ -10,7 +10,7 @@ import AuthRepository from "./repository";
 import UserRepository from "../users/repository";
 import UserDetailsRepository from "../user_details/repository";
 import { STATUSCODE } from "../../@constants";
-import { Users, UserType } from "../../@types";
+import { JWTPayload, Users, UserType } from "../../@types";
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
@@ -132,9 +132,21 @@ export default class AuthService {
       );
     }
 
-    const access_token = this.jwtUtils.generateAccessToken({ user });
+    const accessPayload: JWTPayload = {
+      user: {
+        _id: user._id,
+        username: user.username,
+        password: user.password,
+        status: user.status,
+        role: user.role,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    };
 
-    const refresh_token = this.jwtUtils.generateRefreshToken({ user });
+    const access_token = this.jwtUtils.generateAccessToken(accessPayload);
+
+    const refresh_token = this.jwtUtils.generateRefreshToken(accessPayload);
 
     const credentials = await this.authRepository.addCredential({
       user: user._id,
@@ -178,13 +190,30 @@ export default class AuthService {
       credentials?.user.toString()
     );
 
-    const mockPayload = {
-      ...user,
+    if (!user) {
+      logger.info({
+        REFRESH_TOKEN_ERROR: {
+          message: "User not found",
+        },
+      });
+      throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Invalid Request");
+    }
+
+    const refreshPayload: JWTPayload = {
+      user: {
+        _id: user._id,
+        username: user.username,
+        password: user.password,
+        status: user.status,
+        role: user.role,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
     };
 
-    const newAccessToken = this.jwtUtils.generateAccessToken(mockPayload);
+    const newAccessToken = this.jwtUtils.generateAccessToken(refreshPayload);
 
-    const newRefreshToken = this.jwtUtils.generateRefreshToken(mockPayload);
+    const newRefreshToken = this.jwtUtils.generateRefreshToken(refreshPayload);
 
     const result = await this.authRepository.updateCredential(refresh_token, {
       access_token: newAccessToken,
