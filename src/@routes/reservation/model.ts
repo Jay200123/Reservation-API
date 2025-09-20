@@ -24,8 +24,19 @@ const reservationSchema = new Schema<Reservations>({
     required: true,
   },
 
+  status: {
+    type: String,
+    enum: ["PENDING", "ONGOING", "FINISHED"],
+    required: true,
+  },
+
   amount: {
     type: Number,
+    required: true,
+  },
+
+  reservation_date: {
+    type: Date,
     required: true,
   },
 
