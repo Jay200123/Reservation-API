@@ -9,7 +9,7 @@ import TimeslotService from "./service";
 import TimeslotController from "./controller";
 import { AuthMiddleware } from "../../@middleware";
 import { JWT } from "../../@utils";
-import { PATH } from "../../@constants";
+import { PATH, ROLE } from "../../@constants";
 import { createTimeslotValidation } from "../../@validations";
 
 const router = expresss.Router();
@@ -33,6 +33,7 @@ const authMiddleware = new AuthMiddleware(
 router.get(
   PATH.TIMESLOTS,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   timeslotController.getAllTimeslots
 );
 
@@ -40,6 +41,7 @@ router.get(
 router.get(
   PATH.TIMESLOT_ID,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   timeslotController.getAllTimeslotById
 );
 
@@ -47,6 +49,7 @@ router.get(
 router.post(
   PATH.TIMESLOTS,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.ADMIN),
   createTimeslotValidation,
   timeslotController.createTimeslot
 );
@@ -55,6 +58,7 @@ router.post(
 router.patch(
   PATH.EDIT_TIMESLOT_ID,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.ADMIN),
   timeslotController.updateTimeslotById
 );
 
@@ -62,6 +66,7 @@ router.patch(
 router.delete(
   PATH.TIMESLOT_ID,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.ADMIN),
   timeslotController.deleteTimeslotById
 );
 
