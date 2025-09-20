@@ -52,14 +52,17 @@ export default class ReservationService {
      * @param data - The object to validate, typically req.body.
      */
     verifyFields(createReservationFields, data);
-    
+
     const session = await mongoose.startSession();
 
     session.startTransaction();
     try {
       //checking logic here!
 
-      const result = await this.reservationRepository.create(data);
+      const result = await this.reservationRepository.create({
+        ...data,
+        status: "PENDING",
+      });
 
       await session.commitTransaction();
 
