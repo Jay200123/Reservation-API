@@ -9,7 +9,7 @@ import ServiceServices from "./service";
 import ServiceController from "./controller";
 import { createServiceValidation } from "../../@validations";
 import { JWT } from "../../@utils";
-import { PATH } from "../../@constants";
+import { PATH, ROLE } from "../../@constants";
 import { AuthMiddleware } from "../../@middleware";
 
 //ADD access token middleware.
@@ -32,6 +32,7 @@ const authMiddleware = new AuthMiddleware(
 router.get(
   PATH.SERVICES,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   serviceController.getAllServices
 );
 
@@ -39,6 +40,7 @@ router.get(
 router.get(
   PATH.SERVICE_ID,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   serviceController.getServiceById
 );
 
@@ -46,6 +48,7 @@ router.get(
 router.post(
   PATH.SERVICES,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.ADMIN),
   createServiceValidation,
   serviceController.createService
 );
@@ -54,6 +57,7 @@ router.post(
 router.patch(
   PATH.EDIT_SERVICE_ID,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.ADMIN),
   serviceController.updateServiceById
 );
 
@@ -61,6 +65,7 @@ router.patch(
 router.delete(
   PATH.SERVICE_ID,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.ADMIN),
   serviceController.deleteServiceById
 );
 
