@@ -12,4 +12,9 @@ export const createReservationFields = [
     .bail()
     .isIn(["CASH", "ONLINE_PAYMENT"])
     .withMessage("payment_type must be 'CASH' OR 'ONLINE_PAYMENT' "),
+  body("reservation_date")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("reservation_date"),
 ];
