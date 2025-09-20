@@ -9,7 +9,7 @@ import ReservationService from "./service";
 import ReservationController from "./controller";
 import { AuthMiddleware } from "../../@middleware";
 import { JWT } from "../../@utils";
-import { PATH } from "../../@constants";
+import { PATH, ROLE } from "../../@constants";
 
 const router = express.Router();
 
@@ -31,24 +31,28 @@ const authMiddleware = new AuthMiddleware(
 router.get(
   PATH.RESERVATIONS,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   reservationController.getAllReservations
 );
 
 router.get(
   PATH.RESERVATION_ID,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   reservationController.getReservationById
 );
 
 router.post(
   PATH.RESERVATIONS,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.USER),
   reservationController.createReservation
 );
 
 router.patch(
   PATH.RESERVATIONS,
   authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   reservationController.updateReservationById
 );
 
