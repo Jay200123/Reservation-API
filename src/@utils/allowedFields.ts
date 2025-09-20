@@ -24,7 +24,9 @@ const createReservationFields = [
   "services",
   "timeslot",
   "payment_type",
+  "status",
   "amount",
+  "reservation_date",
 ];
 export {
   createUserFields,
