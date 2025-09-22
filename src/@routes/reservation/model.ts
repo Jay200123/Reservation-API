@@ -8,10 +8,16 @@ const reservationSchema = new Schema<Reservations>({
     required: true,
   },
 
-  services: {
-    type: mongoose.Types.ObjectId,
-    required: true,
-  },
+  // array of service properties
+  services: [
+    {
+      service: {
+        type: mongoose.Types.ObjectId,
+        ref: RESOURCE.SERVICES,
+        required: true,
+      },
+    },
+  ],
 
   timeslot: {
     type: mongoose.Types.ObjectId,
