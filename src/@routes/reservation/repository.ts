@@ -12,6 +12,14 @@ export default class ReservationRepository {
     return await this.ReservationModel.findById(id);
   }
 
+  async getByTimeslotId(timeslot_id: string) {
+    return await this.ReservationModel.findOne({ timeslot: timeslot_id });
+  }
+
+  async getByReservationDate(date: any) {
+    return await this.ReservationModel.findOne({ reservation_date: date });
+  }
+
   async create(
     data: Omit<Reservations, "createdAt" | "updatedAt">,
     options?: { session?: mongoose.ClientSession }
