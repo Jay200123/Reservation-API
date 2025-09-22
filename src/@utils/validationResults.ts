@@ -2,6 +2,7 @@ import { ResultFactory, validationResult } from "express-validator";
 import { ErrorHandler } from "./handlers";
 import { STATUSCODE } from "../@constants";
 import { Request } from "express";
+import { logger } from "./logger";
 
 /**
  * A customized validation result factory that formats errors to return only the error message as a string.
@@ -31,6 +32,13 @@ export const valdiateFields = (req: Request) => {
    * is converted into a single string, with each message separated by a comma and a space (", ").
    */
   if (errors.length > 0) {
+    logger.info({
+      MISSING_REQUIRED_FIELDS_ERROR: {
+        err: errors?.map((err) => {
+          return err;
+        }),
+      },
+    });
     throw new ErrorHandler(STATUSCODE.UNPROCESSABLE_ENTITY, errors.join(", "));
   }
 };
