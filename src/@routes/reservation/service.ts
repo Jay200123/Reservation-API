@@ -7,10 +7,14 @@ import {
   verifyFields,
 } from "../../@utils";
 import ReservationRepository from "./repository";
+import ServiceRepository from "../service/repository";
 import { Reservations } from "../../@types";
 
 export default class ReservationService {
-  constructor(private reservationRepository: ReservationRepository) {}
+  constructor(
+    private reservationRepository: ReservationRepository,
+    private serviceRepository: ServiceRepository
+  ) {}
 
   async getAllReservations() {
     const result = await this.reservationRepository.getAll();
@@ -57,12 +61,43 @@ export default class ReservationService {
 
     session.startTransaction();
     try {
+      // const timeslot = await this.reservationRepository.getByTimeslotId(
+      //   data.timeslot.toString()
+      // );
+
+      let amount: number = 0;
+
+      for (const services of data.services) {
+        const service = await this.serviceRepository.getById(
+          services.toString()
+        );
+
+        if (!service) {
+          logger.info({
+            CREATE_RESERVATION_ERROR: {
+              message: "Service Not Found",
+            },
+          });
+          throw new ErrorHandler(
+            STATUSCODE.BAD_REQUEST,
+            "Invalid Reservations"
+          );
+        }
+
+        amount += service.service_price;
+      }
+
+      console.log(amount);
+
       //checking logic here!
 
       const result = await this.reservationRepository.create({
         ...data,
+        amount: amount,
         status: "PENDING",
       });
+
+      // const result = `committing Transactions!`;
 
       await session.commitTransaction();
 
