@@ -3,10 +3,14 @@ import Reservation from "./model";
 import Settings from "../settings/model";
 import UserCredentials from "../auth/model";
 import Service from "../service/model";
+import Timeslot from "../timeslot/model";
+import User from "../users/model";
 import ReservationRepository from "./repository";
 import SettingsRepository from "../settings/repository";
 import AuthRepository from "../auth/repository";
 import ServiceRepository from "../service/repository";
+import TimeslotRepository from "../timeslot/repository";
+import UserRepository from "../users/repository";
 import ReservationService from "./service";
 import ReservationController from "./controller";
 import { AuthMiddleware } from "../../@middleware";
@@ -20,10 +24,14 @@ const reservationRepository = new ReservationRepository(Reservation);
 const settingsRepository = new SettingsRepository(Settings);
 const authRepository = new AuthRepository(UserCredentials);
 const serviceRepository = new ServiceRepository(Service);
+const timeslotRepository = new TimeslotRepository(Timeslot);
+const userRepository = new UserRepository(User);
 
 const reservationService = new ReservationService(
   reservationRepository,
-  serviceRepository
+  serviceRepository,
+  timeslotRepository,
+  userRepository
 );
 
 const reservationController = new ReservationController(reservationService);
