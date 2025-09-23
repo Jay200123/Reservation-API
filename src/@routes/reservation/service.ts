@@ -57,39 +57,65 @@ export default class ReservationService {
      */
     verifyFields(createReservationFields, data);
 
+    //Initiate Mongoose Session
     const session = await mongoose.startSession();
 
+    //Start Transactions
     session.startTransaction();
-    try {
-      // const timeslot = await this.reservationRepository.getByTimeslotId(
-      //   data.timeslot.toString()
-      // );
 
+    try {
+      // Retrieve an existing reservation by the selected timeslot ID (to check for conflicts)
+      const timeslot = await this.reservationRepository.getByTimeslotId(
+        data.timeslot.toString()
+      );
+
+      /**
+       * Checks if the timeslot and reservation date selected by the user already existed in the reservations collection.
+       * Ensures the selected timeslot and reservation date are not already booked
+       */
+      if (
+        (timeslot &&
+          timeslot.reservation_date.toISOString().split("T")[0] ==
+            String(data.reservation_date) &&
+          timeslot.status == "PENDING") ||
+        timeslot?.status == "ONGOING"
+      ) {
+        throw new ErrorHandler(
+          STATUSCODE.BAD_REQUEST,
+          "Timeslot already occupied"
+        );
+      }
+
+      // initiate a amount with default value of zero
       let amount: number = 0;
 
+      /**
+       * Reiterate each object with a `service` property inside the services array.
+       * This is used to calculate the total amount for the reservation placed by the user and
+       * service validation if the service selected by the user exists in the `services` collection.
+       */
       for (const services of data.services) {
         const service = await this.serviceRepository.getById(
-          services.toString()
+          services.service.toString()
         );
 
+        // For security, send only a generic error to the client. Log detailed error info using Winston.
         if (!service) {
           logger.info({
             CREATE_RESERVATION_ERROR: {
               message: "Service Not Found",
             },
           });
+
           throw new ErrorHandler(
             STATUSCODE.BAD_REQUEST,
             "Invalid Reservations"
           );
         }
 
+        // Add the service's price (from the Services collection) to the total amount
         amount += service.service_price;
       }
-
-      console.log(amount);
-
-      //checking logic here!
 
       const result = await this.reservationRepository.create({
         ...data,
@@ -97,15 +123,18 @@ export default class ReservationService {
         status: "PENDING",
       });
 
-      // const result = `committing Transactions!`;
-
       await session.commitTransaction();
 
       return result;
     } catch (err) {
+      logger.info({
+        CREATE_RESERVATION_ERROR: {
+          err: err,
+        },
+      });
       await session.abortTransaction();
 
-      return err;
+      throw err;
     } finally {
       await session.endSession();
     }
