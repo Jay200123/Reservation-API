@@ -122,7 +122,7 @@ export default class ReservationService {
       }
 
       // initiate a amount with default value of zero
-      let amount: number = 0;
+      let totalAmount: number = 0;
 
       /**
        * Reiterate each object with a `service` property inside the services array.
@@ -149,12 +149,12 @@ export default class ReservationService {
         }
 
         // Add the service's price (from the Services collection) to the total amount
-        amount += service.service_price;
+        totalAmount += service.service_price;
       }
 
       const result = await this.reservationRepository.create({
         ...data,
-        amount: amount,
+        amount: totalAmount,
         status: "PENDING",
       });
 
