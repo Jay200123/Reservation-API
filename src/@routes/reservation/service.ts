@@ -155,7 +155,7 @@ export default class ReservationService {
       const result = await this.reservationRepository.create({
         ...data,
         amount: totalAmount,
-        status: "PENDING",
+        status: "PENDING", //set the reservation to default as `pending`.
       });
 
       await session.commitTransaction();
