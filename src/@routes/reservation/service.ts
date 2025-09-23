@@ -9,11 +9,15 @@ import {
 import ReservationRepository from "./repository";
 import ServiceRepository from "../service/repository";
 import { Reservations } from "../../@types";
+import TimeslotRepository from "../timeslot/repository";
+import UserRepository from "../users/repository";
 
 export default class ReservationService {
   constructor(
     private reservationRepository: ReservationRepository,
-    private serviceRepository: ServiceRepository
+    private serviceRepository: ServiceRepository,
+    private timeslotRepository: TimeslotRepository,
+    private userRepository: UserRepository
   ) {}
 
   async getAllReservations() {
@@ -64,21 +68,52 @@ export default class ReservationService {
     session.startTransaction();
 
     try {
-      // Retrieve an existing reservation by the selected timeslot ID (to check for conflicts)
-      const timeslot = await this.reservationRepository.getByTimeslotId(
+      // Retrieve user by id (data.user property) - (to check if the user exists in the database.)
+      const user = await this.userRepository.getById(data.user.toString());
+
+      //If user does not exists.
+      // For security, send only a generic error to the client. Log detailed error info using Winston.
+      if (!user) {
+        logger.info({
+          CREATE_RESERVATION_ERROR: {
+            message: "User Not Found",
+          },
+        });
+        throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Invalid Reservations");
+      }
+
+      // Retrieve timeslot by id  (data.timeslot property) - (to check if the timeslot exists in the database.)
+      const timeslot = await this.timeslotRepository.getById(
         data.timeslot.toString()
       );
+
+      //If timeslot does not exists.
+      // For security, send only a generic error to the client. Log detailed error info using Winston.
+      if (!timeslot) {
+        logger.info({
+          CREATE_RESERVATION_ERROR: {
+            message: "Timeslot Not Found",
+          },
+        });
+        throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Invalid Reservations");
+      }
+
+      // Retrieve an existing reservation by the selected timeslot ID (to check for conflicts)
+      const reservation_timeslot =
+        await this.reservationRepository.getByTimeslotId(
+          data.timeslot.toString()
+        );
 
       /**
        * Checks if the timeslot and reservation date selected by the user already existed in the reservations collection.
        * Ensures the selected timeslot and reservation date are not already booked
        */
       if (
-        (timeslot &&
-          timeslot.reservation_date.toISOString().split("T")[0] ==
+        (reservation_timeslot &&
+          reservation_timeslot.reservation_date.toISOString().split("T")[0] ==
             String(data.reservation_date) &&
-          timeslot.status == "PENDING") ||
-        timeslot?.status == "ONGOING"
+          reservation_timeslot.status == "PENDING") ||
+        reservation_timeslot?.status == "ONGOING"
       ) {
         throw new ErrorHandler(
           STATUSCODE.BAD_REQUEST,
