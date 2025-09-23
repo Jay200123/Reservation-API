@@ -63,7 +63,9 @@ export default class ReservationController {
 
     valdiateFields(req);
 
-    const result = await this.reservationService.createReservation(req.body);
+    const result = await this.reservationService.createReservation({
+      ...req.body,
+    });
 
     logger.info({
       CREATE_RESERVATION_RESPONSE: {
