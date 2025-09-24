@@ -8,7 +8,7 @@ const reservationSchema = new Schema<Reservations>({
     required: true,
   },
 
-  // array of service properties
+  // array of service.
   services: [
     {
       service: {
@@ -32,13 +32,17 @@ const reservationSchema = new Schema<Reservations>({
 
   status: {
     type: String,
-    enum: ["PENDING", "ONGOING", "FINISHED"],
+    enum: ["PENDING", "RESCHEDULED", "ONGOING", "FINISHED"],
     required: true,
   },
 
   amount: {
     type: Number,
     required: true,
+  },
+
+  reason: {
+    type: String,
   },
 
   reservation_date: {
