@@ -9,7 +9,7 @@ type ServiceReservations = {
   service: mongoose.Types.ObjectId | Service;
 };
 
-export type Reservations = {
+type Reservations = {
   user: mongoose.Types.ObjectId | Users;
   services: ServiceReservations[];
   timeslot: mongoose.Types.ObjectId | Timeslot;
@@ -21,3 +21,5 @@ export type Reservations = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export { Reservations, ReservationStatus };
