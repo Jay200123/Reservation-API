@@ -42,7 +42,7 @@ const authMiddleware = new AuthMiddleware(
   new JWT()
 );
 
-//get all reservations endpoint
+//get all reservations endpoint.
 router.get(
   PATH.RESERVATIONS,
   authMiddleware.AccessTokenVerifier(),
@@ -50,6 +50,7 @@ router.get(
   reservationController.getAllReservations
 );
 
+//get reservation by id endpoint.
 router.get(
   PATH.RESERVATION_ID,
   authMiddleware.AccessTokenVerifier(),
@@ -57,12 +58,21 @@ router.get(
   reservationController.getReservationById
 );
 
+//create reservation endpoint.
 router.post(
   PATH.RESERVATIONS,
   authMiddleware.AccessTokenVerifier(),
   authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   createReservationFields,
   reservationController.createReservation
+);
+
+//edit reservation status endpoint.
+router.patch(
+  PATH.EDIT_STATUS_RESERVATION_ID,
+  authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.ADMIN),
+  reservationController.updateReservationStatusById
 );
 
 export default router;
