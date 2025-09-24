@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-export const createReservationFields = [
+const createReservationFields = [
   body("user").trim().escape().notEmpty().withMessage("user required"),
   body("services")
     .isArray({ min: 1 })
@@ -20,3 +20,18 @@ export const createReservationFields = [
     .notEmpty()
     .withMessage("reservation_date"),
 ];
+
+const updateReservationStatusField = [
+  body("status")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("payment_type required")
+    .bail()
+    .isIn(["PENDING", "RESCHEDULED", "ONGOING", "FINISHED"])
+    .withMessage(
+      "status must be 'PENDING', 'RESCHEDULED', 'ONGOING' AND 'FINISHED' "
+    ),
+];
+
+export { createReservationFields, updateReservationStatusField };
