@@ -26,12 +26,4 @@ export default class ReservationRepository {
   ) {
     return await this.ReservationModel.create([data], options);
   }
-
-  async updateById(id: string, data: Partial<Reservations>) {
-    return await this.ReservationModel.findByIdAndUpdate(
-      id,
-      { ...data },
-      { new: true }
-    );
-  }
 }
