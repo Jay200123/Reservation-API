@@ -15,7 +15,10 @@ import ReservationService from "./service";
 import ReservationController from "./controller";
 import { AuthMiddleware } from "../../@middleware";
 import { JWT } from "../../@utils";
-import { createReservationFields } from "../../@validations";
+import {
+  createReservationFields,
+  updateReservationStatusField,
+} from "../../@validations";
 import { PATH, ROLE } from "../../@constants";
 
 const router = express.Router();
@@ -72,6 +75,7 @@ router.patch(
   PATH.EDIT_STATUS_RESERVATION_ID,
   authMiddleware.AccessTokenVerifier(),
   authMiddleware.UserRoleVerifier(ROLE.ADMIN),
+  updateReservationStatusField,
   reservationController.updateReservationStatusById
 );
 
