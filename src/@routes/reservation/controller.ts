@@ -88,6 +88,8 @@ export default class ReservationController {
       },
     });
 
+    valdiateFields(req);
+
     const result = await this.reservationService.updateReservationStatusById(
       req.params.id,
       req.body.status
