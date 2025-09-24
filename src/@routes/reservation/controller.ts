@@ -81,4 +81,29 @@ export default class ReservationController {
     );
   };
 
+  updateReservationStatusById: MiddlewareFn = async (req, res, next) => {
+    logger.info({
+      UPDATE_RESERVATION_STATUS_BY_ID_REQUEST: {
+        message: "SUCCESS",
+      },
+    });
+
+    const result = await this.reservationService.updateReservationStatusById(
+      req.params.id,
+      req.body.status
+    );
+
+    logger.info({
+      UPDATE_RESERVATION_STATUS_BY_ID_RESPONSE: {
+        message: "SUCCESS",
+      },
+    });
+
+    return SuccessHandler(
+      res,
+      STATUSCODE.SUCCESS,
+      result,
+      "Reservation updated successfully."
+    );
+  };
 }
