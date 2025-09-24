@@ -53,6 +53,12 @@ export default class ReservationService {
     return result;
   }
 
+  /**
+   * Insert Reservation Details to reservation collections in the database.
+   * @param data
+   * @returns result
+   */
+
   async createReservation(data: Omit<Reservations, "createdAt" | "updatedAt">) {
     /**
      * Verifies that all required fields exist in the given data object, if an unknown field exists it will throw an Error
@@ -60,6 +66,10 @@ export default class ReservationService {
      * @param data - The object to validate, typically req.body.
      */
     verifyFields(createReservationFields, data);
+
+    // New Possible Features
+    // - Reschedule Reservation
+    // - Cancel or void Reservations
 
     //Initiate Mongoose Session
     const session = await mongoose.startSession();
@@ -158,6 +168,7 @@ export default class ReservationService {
         status: "PENDING", //set the reservation to default as `pending`.
       });
 
+      //commit mongoose Transaction
       await session.commitTransaction();
 
       return result;
@@ -173,37 +184,5 @@ export default class ReservationService {
     } finally {
       await session.endSession();
     }
-  }
-
-  async updateReservationById(id: string, data: Partial<Reservations>) {
-    /**
-     * Verifies that all required fields exist in the given data object, if an unknown field exists it will throw an Error
-     * @param fields - An array of required field names to check (e.g. createUserFields).
-     * @param data - The object to validate, typically req.body.
-     */
-    verifyFields(createReservationFields, data);
-
-    if (id == ":id") {
-      throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Missing Reservation ID");
-    }
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      logger.info({
-        GET_RESERVATION_BY_ID_ERROR: {
-          message: "Invalid mongoose ID",
-        },
-      });
-      throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Invalid Request");
-    }
-
-    const reservation = await this.reservationRepository.getById(id);
-
-    if (!reservation) {
-      throw new ErrorHandler(STATUSCODE.NOT_FOUND, "Reservation not found");
-    }
-
-    const result = await this.reservationRepository.updateById(id, data);
-
-    return result;
   }
 }
