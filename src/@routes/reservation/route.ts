@@ -65,11 +65,4 @@ router.post(
   reservationController.createReservation
 );
 
-router.patch(
-  PATH.RESERVATIONS,
-  authMiddleware.AccessTokenVerifier(),
-  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
-  reservationController.updateReservationById
-);
-
 export default router;
