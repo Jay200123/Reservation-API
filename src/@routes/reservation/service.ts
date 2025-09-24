@@ -8,7 +8,7 @@ import {
 } from "../../@utils";
 import ReservationRepository from "./repository";
 import ServiceRepository from "../service/repository";
-import { Reservations } from "../../@types";
+import { Reservations, ReservationStatus } from "../../@types";
 import TimeslotRepository from "../timeslot/repository";
 import UserRepository from "../users/repository";
 
@@ -184,5 +184,28 @@ export default class ReservationService {
     } finally {
       await session.endSession();
     }
+  }
+
+  async updateReservationStatusById(id: string, status: ReservationStatus) {
+    if (id == ":id") {
+      throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Missing Reservation ID");
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Invalid Request");
+    }
+
+    const reservation = await this.reservationRepository.getById(id);
+
+    if (!reservation) {
+      throw new ErrorHandler(STATUSCODE.NOT_FOUND, "Reservation  not found");
+    }
+
+    const result = await this.reservationRepository.updateStatusById(
+      id,
+      status
+    );
+
+    return result;
   }
 }
