@@ -1,6 +1,6 @@
 import ServiceServices from "./service";
 import { MiddlewareFn } from "../../@types";
-import { SuccessHandler, logger, valdiateFields } from "../../@utils";
+import { SuccessHandler, logger, validateFields } from "../../@utils";
 import { STATUSCODE } from "../../@constants";
 
 export default class ServiceController {
@@ -49,7 +49,7 @@ export default class ServiceController {
       },
     });
 
-    valdiateFields(req);
+    validateFields(req);
 
     const result = await this.serviceServices.createService(req.body);
 
