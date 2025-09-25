@@ -22,4 +22,11 @@ type Reservations = {
   updatedAt: Date;
 };
 
-export { Reservations, ReservationStatus };
+type Reschedule = {
+  timeslot: mongoose.Types.ObjectId | Timeslot;
+  reservation_date: Date;
+  reason: string;
+  status: ReservationStatus;
+};
+
+export { Reservations, ReservationStatus, Reschedule };
