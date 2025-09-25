@@ -28,10 +28,14 @@ const createReservationFields = [
   "amount",
   "reservation_date",
 ];
+
+const rescheduleFields = ["timeslot", "reservation_date", "reason"];
+
 export {
   createUserFields,
   updateUserFields,
   createServiceFields,
   createTimeslotFields,
   createReservationFields,
+  rescheduleFields,
 };
