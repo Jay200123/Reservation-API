@@ -22,7 +22,7 @@ const myValidationResult: ResultFactory<string> = validationResult.withDefaults(
  * @description This function checks for validation errors in the request object using a customized validation result factory.
  * If any errors are found, it throws an ErrorHandler with a status code of 422 (Unprocessable Entity) and a message "Invalid Fields!".
  */
-export const valdiateFields = (req: Request) => {
+export const validateFields = (req: Request) => {
   const errors = myValidationResult(req).array();
 
   /**
