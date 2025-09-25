@@ -4,7 +4,7 @@ import {
   logger,
   SuccessHandler,
   ErrorHandler,
-  valdiateFields,
+  validateFields,
 } from "../../@utils";
 import { STATUSCODE } from "../../@constants";
 export default class AuthController {
@@ -17,7 +17,7 @@ export default class AuthController {
       },
     });
     // Validate request fields
-    valdiateFields(req);
+    validateFields(req);
 
     const result = await this.authService.registerUser(req.body);
 
