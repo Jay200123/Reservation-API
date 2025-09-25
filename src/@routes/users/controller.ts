@@ -1,6 +1,6 @@
 import UserService from "./service";
 import { MiddlewareFn } from "../../@types";
-import { SuccessHandler, logger, valdiateFields } from "../../@utils";
+import { SuccessHandler, logger, validateFields } from "../../@utils";
 import { STATUSCODE } from "../../@constants";
 
 export default class UserController {
@@ -49,10 +49,7 @@ export default class UserController {
       },
     });
 
-    const result = await this.userService.updateUser(
-      req.params.id,
-      req.body
-    );
+    const result = await this.userService.updateUser(req.params.id, req.body);
 
     logger.info({
       UPDATE_USER_RESPONSE: {
