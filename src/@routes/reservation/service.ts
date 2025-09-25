@@ -4,11 +4,12 @@ import {
   createReservationFields,
   ErrorHandler,
   logger,
+  rescheduleFields,
   verifyFields,
 } from "../../@utils";
 import ReservationRepository from "./repository";
 import ServiceRepository from "../service/repository";
-import { Reservations, ReservationStatus } from "../../@types";
+import { Reschedule, Reservations, ReservationStatus } from "../../@types";
 import TimeslotRepository from "../timeslot/repository";
 import UserRepository from "../users/repository";
 
@@ -205,6 +206,41 @@ export default class ReservationService {
       id,
       status
     );
+
+    return result;
+  }
+
+  async updateReservationScheduleById(
+    id: string,
+    data: Omit<Reschedule, "status">
+  ) {
+    if (id == ":id") {
+      throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Missing Reservation ID");
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Invalid Request");
+    }
+
+    const reservation = await this.reservationRepository.getById(id);
+
+    if (!reservation) {
+      throw new ErrorHandler(STATUSCODE.NOT_FOUND, "Reservation  not found");
+    }
+
+    /**
+     * Verifies that all required fields exist in the given data object, if an unknown field exists it will throw an Error
+     * @param fields - An array of required field names to check (e.g. createUserFields).
+     * @param data - The object to validate, typically req.body.
+     */
+    verifyFields(rescheduleFields, data);
+
+    // const result = await this.reservationRepository.rescheduleById(id, {
+    //   ...data,
+    //   status: "RESCHEDULED",
+    // });
+
+    const result = "Mock Reschedule API"
 
     return result;
   }
