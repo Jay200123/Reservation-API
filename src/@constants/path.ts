@@ -17,4 +17,5 @@ export const PATH = {
   RESERVATION_ID: "/reservation/:id",
   EDIT_RESERVATION_ID: "/reservation/edit/:id",
   EDIT_STATUS_RESERVATION_ID: "/reservation/edit/status/:id",
+  RESCHEDULE_RESERVATION_ID: "/reservation/reschedule/:id",
 };
