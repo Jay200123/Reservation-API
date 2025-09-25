@@ -26,7 +26,7 @@ const updateReservationStatusField = [
     .trim()
     .escape()
     .notEmpty()
-    .withMessage("payment_type required")
+    .withMessage("status required")
     .bail()
     .isIn(["PENDING", "RESCHEDULED", "ONGOING", "FINISHED"])
     .withMessage(
@@ -34,4 +34,18 @@ const updateReservationStatusField = [
     ),
 ];
 
-export { createReservationFields, updateReservationStatusField };
+const rescheduleReservationFields = [
+  body("timeslot").trim().escape().notEmpty().withMessage("timeslot required"),
+  body("reservation_date")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("reservation_date required"),
+  body("reason").trim().escape().notEmpty().withMessage("reason required"),
+];
+
+export {
+  createReservationFields,
+  updateReservationStatusField,
+  rescheduleReservationFields,
+};
