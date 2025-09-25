@@ -1,6 +1,6 @@
 import { MiddlewareFn } from "../../@types";
 import ReservationService from "./service";
-import { SuccessHandler, logger, valdiateFields } from "../../@utils";
+import { SuccessHandler, logger, validateFields } from "../../@utils";
 import { STATUSCODE } from "../../@constants";
 
 export default class ReservationController {
@@ -61,7 +61,7 @@ export default class ReservationController {
       },
     });
 
-    valdiateFields(req);
+    validateFields(req);
 
     const result = await this.reservationService.createReservation({
       ...req.body,
@@ -88,7 +88,7 @@ export default class ReservationController {
       },
     });
 
-    valdiateFields(req);
+    validateFields(req);
 
     const result = await this.reservationService.updateReservationStatusById(
       req.params.id,
@@ -106,6 +106,34 @@ export default class ReservationController {
       STATUSCODE.SUCCESS,
       result,
       "Reservation updated successfully."
+    );
+  };
+
+  updateReservationScheduleById: MiddlewareFn = async (req, res, next) => {
+    logger.info({
+      RESCHEDULE_RESERVATION_REQUEST: {
+        message: "SUCCESS",
+      },
+    });
+
+    validateFields(req);
+
+    const result = await this.reservationService.updateReservationScheduleById(
+      req.params.id,
+      req.body
+    );
+
+    logger.info({
+      RESCHEDULE_RESERVATION_RESPONSE: {
+        message: "SUCCESS",
+      },
+    });
+
+    return SuccessHandler(
+      res,
+      STATUSCODE.SUCCESS,
+      result,
+      "Reservation rescheduled successfully."
     );
   };
 }
