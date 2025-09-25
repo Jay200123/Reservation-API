@@ -17,6 +17,7 @@ import { AuthMiddleware } from "../../@middleware";
 import { JWT } from "../../@utils";
 import {
   createReservationFields,
+  rescheduleReservationFields,
   updateReservationStatusField,
 } from "../../@validations";
 import { PATH, ROLE } from "../../@constants";
@@ -65,7 +66,7 @@ router.get(
 router.post(
   PATH.RESERVATIONS,
   authMiddleware.AccessTokenVerifier(),
-  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
+  authMiddleware.UserRoleVerifier(ROLE.USER),
   createReservationFields,
   reservationController.createReservation
 );
@@ -77,6 +78,15 @@ router.patch(
   authMiddleware.UserRoleVerifier(ROLE.ADMIN),
   updateReservationStatusField,
   reservationController.updateReservationStatusById
+);
+
+//reschedule reservation endpoint.
+router.patch(
+  PATH.RESCHEDULE_RESERVATION_ID,
+  authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
+  rescheduleReservationFields,
+  reservationController.updateReservationScheduleById
 );
 
 export default router;
