@@ -1,5 +1,5 @@
 import mongoose, { Model } from "mongoose";
-import { Reservations, ReservationStatus } from "../../@types";
+import { Reservations, ReservationStatus, Reschedule } from "../../@types";
 
 export default class ReservationRepository {
   constructor(private ReservationModel: Model<Reservations>) {}
@@ -28,6 +28,16 @@ export default class ReservationRepository {
       id,
       {
         status: status,
+      },
+      { new: true }
+    );
+  }
+
+  async rescheduleById(id: string, data: Reschedule) {
+    return await this.ReservationModel.findByIdAndUpdate(
+      id,
+      {
+        ...data,
       },
       { new: true }
     );
