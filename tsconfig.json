@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node10",
     "target": "es2024",
     "esModuleInterop": true,
     "strict": true,
-    "moduleResolution": "node10",
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist" // created a outDir once npm run build is command is called (used in docker)
   },
   "exclude": ["node_modules"]
 }
