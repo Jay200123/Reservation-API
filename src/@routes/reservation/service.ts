@@ -235,12 +235,28 @@ export default class ReservationService {
      */
     verifyFields(rescheduleFields, data);
 
+    const reservation_timeslot =
+      await this.reservationRepository.getByTimeslotId(
+        data.timeslot.toString()
+      );
+
+    if (
+      reservation_timeslot &&
+      reservation_timeslot.reservation_date.toISOString().split("T")[0] ==
+        String(data.reservation_date)
+    ) {
+      throw new ErrorHandler(
+        STATUSCODE.BAD_REQUEST,
+        "Timeslot already occupied"
+      );
+    }
+
     // const result = await this.reservationRepository.rescheduleById(id, {
     //   ...data,
     //   status: "RESCHEDULED",
     // });
 
-    const result = "Mock Reschedule API"
+    const result = "Mock Reschedule API";
 
     return result;
   }
