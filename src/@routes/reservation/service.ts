@@ -9,16 +9,19 @@ import {
 } from "../../@utils";
 import ReservationRepository from "./repository";
 import ServiceRepository from "../service/repository";
+import UserDetailsRepository from "../user_details/repository";
 import { Reschedule, Reservations, ReservationStatus } from "../../@types";
 import TimeslotRepository from "../timeslot/repository";
 import UserRepository from "../users/repository";
+import { paymayaCheckout } from "../../@payments";
 
 export default class ReservationService {
   constructor(
     private reservationRepository: ReservationRepository,
     private serviceRepository: ServiceRepository,
     private timeslotRepository: TimeslotRepository,
-    private userRepository: UserRepository
+    private userRepository: UserRepository,
+    private userDetailsRepository: UserDetailsRepository
   ) {}
 
   async getAllReservations() {
@@ -67,10 +70,11 @@ export default class ReservationService {
      * @param data - The object to validate, typically req.body.
      */
     verifyFields(createReservationFields, data);
-
-    // New Possible Features
-    // - Reschedule Reservation
-    // - Cancel or void Reservations
+    /**
+     * Additional Error Logics.
+     * bawal na mag reserve ng same date and time ang user.
+     * bawal mag reserve pag ang date ay tapos or nakaraan pa.
+     */
 
     //Initiate Mongoose Session
     const session = await mongoose.startSession();
@@ -88,6 +92,19 @@ export default class ReservationService {
         logger.info({
           CREATE_RESERVATION_ERROR: {
             message: "User Not Found",
+          },
+        });
+        throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Invalid Reservations");
+      }
+
+      const user_details = await this.userDetailsRepository.getDetailsByUserId(
+        data.user.toString()
+      );
+
+      if (!user_details) {
+        logger.info({
+          CREATE_RESERVATION_ERROR: {
+            message: "User Details Not Found",
           },
         });
         throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Invalid Reservations");
@@ -163,6 +180,36 @@ export default class ReservationService {
         totalAmount += service.service_price;
       }
 
+      let payment = {} as any;
+
+      //Paymaya logic
+      if (data.payment_type == "ONLINE_PAYMENT") {
+        const fullname = user_details.fullname.split(" ");
+
+        const payload = {
+          totalAmount: {
+            value: totalAmount,
+            currency: "PHP",
+          },
+          buyer: {
+            contact: {
+              email: user_details.email,
+              contact_number: user_details.contact_number,
+            },
+            firstName: fullname[0],
+            lastName: fullname[fullname.length - 1],
+          },
+          redirectUrl: {
+            success: "http://localhost:4000/success",
+            failure: "http://localhost:4000/failure",
+            cancel: "http://localhost:4000/cancel",
+          },
+          requestReferenceNumber: `ref-${Date.now()}`,
+        };
+
+        payment = await paymayaCheckout(payload);
+      }
+
       const result = await this.reservationRepository.create({
         ...data,
         amount: totalAmount,
@@ -172,7 +219,13 @@ export default class ReservationService {
       //commit mongoose Transaction
       await session.commitTransaction();
 
-      return result;
+      return {
+        ...result,
+        payment: {
+          checkoutId: payment.checkoutId,
+          redirectUrl: payment.redirectUrl,
+        },
+      };
     } catch (err) {
       logger.info({
         CREATE_RESERVATION_ERROR: {
@@ -251,12 +304,10 @@ export default class ReservationService {
       );
     }
 
-    // const result = await this.reservationRepository.rescheduleById(id, {
-    //   ...data,
-    //   status: "RESCHEDULED",
-    // });
-
-    const result = "Mock Reschedule API";
+    const result = await this.reservationRepository.rescheduleById(id, {
+      ...data,
+      status: "RESCHEDULED",
+    });
 
     return result;
   }
