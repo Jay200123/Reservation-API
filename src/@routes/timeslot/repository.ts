@@ -19,7 +19,7 @@ export default class TimeslotRepository {
   async updateById(id: string, data: Partial<Timeslot>) {
     return await this.timeslotModel.findByIdAndUpdate(
       id,
-      { ...data, updatedAt: Date.now },
+      { ...data, updatedAt: Date.now() },
       { new: true }
     );
   }
