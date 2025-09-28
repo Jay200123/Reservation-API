@@ -75,7 +75,6 @@ export default class UserService {
    * @returns result
    */
   async updateUser(id: string, data: Partial<UserType>) {
-
     if (id == ":id") {
       throw new ErrorHandler(400, "Missing user ID");
     }
@@ -101,7 +100,7 @@ export default class UserService {
      */
     verifyFields(updateUserFields, data);
 
-    const result = await this.userRepository.updateById(id, data);
+    const result = await this.userDetailsRepository.updateById(id, data);
 
     return result;
   }
