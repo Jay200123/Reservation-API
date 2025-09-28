@@ -246,9 +246,9 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 
 ---
 
-# USERS API
+## USERS API
 
-### GET ALL API
+### GET ALL USERS API
 
 **Method:** `GET`
 
