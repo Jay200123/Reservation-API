@@ -31,6 +31,35 @@ All requests requires an `Authorization` header.
 
 ---
 
+## 🐳 Docker Setup
+
+This project uses **Docker Compose** for containerization.
+
+### Build & Start Services
+```bash
+docker compose up -d --build
+
+docker compose logs -f
+
+docker compose down 
+
+```
+
+**docker compose up -d --build**  
+Builds fresh images (using the Dockerfile) and starts new containers in **detached mode** (running in the background).
+
+**docker compose logs -f**  
+- Shows the logs from all running containers.  
+- `-f` (follow) keeps streaming new log output in real time (similar to `tail -f`).  
+- Useful for debugging, especially if you want to watch your app or database logs as they happen.
+
+**docker compose down**  
+- Stops and removes all containers, networks, and volumes created by `docker compose up`.  
+- Use this when you want to **cleanly shut down** your application.  
+- Unlike `docker compose stop`, it also removes the default network, so the environment resets fully.
+
+---
+
 ### Register User API
 
 **Method:** `POST`
