@@ -65,7 +65,6 @@ All requests requires an `Authorization` header.
   "details": [
     {
       "_id": "6514e09c8a5b72c7ac8f9a11",
-
       "username": "johndoe",
       "password": "j0hnDo3123",
       "fullname": "John Doe",
