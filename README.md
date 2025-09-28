@@ -150,3 +150,36 @@ All requests requires an `Authorization` header.
 - 401 - "Invalid Request".
 
 ---
+
+### Refresh Token API
+
+**Method:** `GET`
+
+**Endpoint:**
+`/api/v1/refresh`
+
+**Headers**
+
+- **Authorization:** `refresh_token`
+- **Content-type:** `application/json`
+
+**response**
+
+```json
+{
+  "status": 200,
+  "details": {
+    "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY4ZDhjYmJkODMyOTViM2ZlYjJjNzdkNiIsInVzZXJuYW1lIjoiam9obmRvZSIsInBhc3N3b3JkIjoiJDJiJDEwJER1cE1tSFBXRDdHY3ptdXg1TFUxdk81OHhodmY3Q2Q5M2NFWE9wNkpoNHouQ3ZwVGdSN05DIiwic3RhdHVzIjoiUEVORElORyIsInJvbGUiOiJVU0VSIiwiY3JlYXRlZEF0IjoiMjAyNS0wOS0yOFQwNTo0NjozNy4yNjZaIiwidXBkYXRlZEF0IjoiMjAyNS0wOS0yOFQwNTo0NjozNy4yNjZaIn0sImlhdCI6MTc1OTAzODc4NCwiZXhwIjoxNzU5MDQyMzg0fQ.75GnXZPTlGMyU3mQGNU0LJPeW8r_nlmAdYw7u-WjbUg",
+    "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjY4ZDhjYmJkODMyOTViM2ZlYjJjNzdkNiIsInVzZXJuYW1lIjoiam9obmRvZSIsInBhc3N3b3JkIjoiJDJiJDEwJER1cE1tSFBXRDdHY3ptdXg1TFUxdk81OHhodmY3Q2Q5M2NFWE9wNkpoNHouQ3ZwVGdSN05DIiwic3RhdHVzIjoiUEVORElORyIsInJvbGUiOiJVU0VSIiwiY3JlYXRlZEF0IjoiMjAyNS0wOS0yOFQwNTo0NjozNy4yNjZaIiwidXBkYXRlZEF0IjoiMjAyNS0wOS0yOFQwNTo0NjozNy4yNjZaIn0sImlhdCI6MTc1OTAzODc4NCwiZXhwIjoxNzYxNjMwNzg0fQ.6DnIZ3pk4_1vaBR6QRkTDyrvJIc5JR_Tf_8r1224hzI"
+  },
+  "message": "Success"
+}
+```
+
+### Errors
+
+- 400 - "Invalid Request".
+- 401 - "Unauthorized".
+- 403 - "Forbidden"
+
+---
