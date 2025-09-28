@@ -36,26 +36,29 @@ All requests requires an `Authorization` header.
 This project uses **Docker Compose** for containerization.
 
 ### Build & Start Services
+
 ```bash
 docker compose up -d --build
 
 docker compose logs -f
 
-docker compose down 
+docker compose down
 
 ```
 
 **docker compose up -d --build**  
 Builds fresh images (using the Dockerfile) and starts new containers in **detached mode** (running in the background).
 
-**docker compose logs -f**  
-- Shows the logs from all running containers.  
-- `-f` (follow) keeps streaming new log output in real time (similar to `tail -f`).  
+**docker compose logs -f**
+
+- Shows the logs from all running containers.
+- `-f` (follow) keeps streaming new log output in real time (similar to `tail -f`).
 - Useful for debugging, especially if you want to watch your app or database logs as they happen.
 
-**docker compose down**  
-- Stops and removes all containers, networks, and volumes created by `docker compose up`.  
-- Use this when you want to **cleanly shut down** your application.  
+**docker compose down**
+
+- Stops and removes all containers, networks, and volumes created by `docker compose up`.
+- Use this when you want to **cleanly shut down** your application.
 - Unlike `docker compose stop`, it also removes the default network, so the environment resets fully.
 
 ---
@@ -238,6 +241,173 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 ### Errors
 
 - 400 - "Invalid Request".
+- 401 - "Unauthorized".
+- 403 - "Forbidden"
+
+---
+
+# USERS API
+
+### GET ALL API
+
+**Method:** `GET`
+
+**Endpoint:**
+`/api/v1/users`
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**response**
+
+```json
+{
+  "status": 200,
+  "details": [
+    {
+      "_id": "68bfbe00ec958d03b007fe13",
+      "user": {
+        "_id": "68bfbe00ec958d03b007fe11",
+        "username": "john123",
+        "password": "$2b$10$2lsL62zMfjGP1PwXw.oVF.l3AmnJjrR2QSyLSAN5wm2ZGraCfrP4y",
+        "createdAt": "2025-09-09T05:41:20.681Z",
+        "updatedAt": "2025-09-16T09:39:45.506Z",
+        "__v": 0
+      },
+      "fullname": "John Doe",
+      "email": "john.doe@gmail.com",
+      "contact_number": "09123456789",
+      "address": "New Orleans Washington",
+      "city": "Chicago",
+      "createdAt": "2025-09-09T05:41:20.733Z",
+      "updatedAt": "2025-09-09T05:41:20.733Z",
+      "__v": 0
+    },
+    {
+      "_id": "68c92931b00d0f36a921e688",
+      "user": {
+        "_id": "68c92931b00d0f36a921e686",
+        "username": "jay123",
+        "password": "$2b$10$T.bmnz6s4MeBtXKIVy5U6u12V6WBKYriK9SxUSBMPVHJwQ7OGR5mO",
+        "status": "PENDING",
+        "role": "USER",
+        "createdAt": "2025-09-16T09:09:05.451Z",
+        "updatedAt": "2025-09-16T09:09:05.451Z",
+        "__v": 0
+      },
+      "fullname": "Renyel Jay Sioc",
+      "email": "renyeljay.sioc@yahoo.com",
+      "contact_number": "09308650272",
+      "address": "Block 156 Lot 17 Central Bicutan Arago Street",
+      "city": "Taguig City",
+      "createdAt": "2025-09-16T09:09:05.517Z",
+      "updatedAt": "2025-09-16T09:09:05.517Z",
+      "__v": 0
+    },
+    {
+      "_id": "68d10ef0bd04042bdaee1031",
+      "user": {
+        "_id": "68d10ef0bd04042bdaee102f",
+        "username": "admin",
+        "password": "$2b$10$MnZmRCSDoZToBPCNvVzvQe3csHsqh5aLOBlPA07PU7/8mCpxfucpC",
+        "status": "PENDING",
+        "role": "ADMIN",
+        "createdAt": "2025-09-22T08:55:12.007Z",
+        "updatedAt": "2025-09-22T08:55:12.007Z",
+        "__v": 0
+      },
+      "fullname": "Renyel Jay Sioc",
+      "email": "jayAdmin@yahoo.com",
+      "contact_number": "09505798533",
+      "address": "Block 156 Lot 17 Central Bicutan Arago Street",
+      "city": "Taguig City",
+      "createdAt": "2025-09-22T08:55:12.050Z",
+      "updatedAt": "2025-09-22T08:55:12.050Z",
+      "__v": 0
+    },
+    {
+      "_id": "68d8cbbd83295b3feb2c77d8",
+      "user": {
+        "_id": "68d8cbbd83295b3feb2c77d6",
+        "username": "johndoe",
+        "password": "$2b$10$DupMmHPWD7Gczmux5LU1vO58xhvf7Cd93cEXOp6Jh4z.CvpTgR7NC",
+        "status": "PENDING",
+        "role": "USER",
+        "createdAt": "2025-09-28T05:46:37.266Z",
+        "updatedAt": "2025-09-28T05:46:37.266Z",
+        "__v": 0
+      },
+      "fullname": "John Doe",
+      "email": "johndoe@gmail.com",
+      "contact_number": "0923456789",
+      "address": "Test Address",
+      "city": "Test City",
+      "createdAt": "2025-09-28T05:46:37.307Z",
+      "updatedAt": "2025-09-28T05:46:37.307Z",
+      "__v": 0
+    }
+  ],
+  "message": "Success"
+}
+```
+
+### Errors
+
+- 404 - "Users not found".
+- 401 - "Unauthorized".
+- 403 - "Forbidden"
+
+---
+
+### GET USER BY ID API
+
+**Method:** `GET`
+
+**Endpoint:**
+`/api/v1/user/:id`
+
+**parameters**
+
+- id - unique user ID.
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**response**
+
+```json
+{
+  "status": 200,
+  "details": {
+    "_id": "68bfbe00ec958d03b007fe13",
+    "user": {
+      "_id": "68bfbe00ec958d03b007fe11",
+      "username": "john123",
+      "password": "$2b$10$2lsL62zMfjGP1PwXw.oVF.l3AmnJjrR2QSyLSAN5wm2ZGraCfrP4y",
+      "createdAt": "2025-09-09T05:41:20.681Z",
+      "updatedAt": "2025-09-16T09:39:45.506Z",
+      "__v": 0
+    },
+    "fullname": "John Doe",
+    "email": "john.doe@gmail.com",
+    "contact_number": "09123456789",
+    "address": "New Orleans Washington",
+    "city": "Chicago",
+    "createdAt": "2025-09-09T05:41:20.733Z",
+    "updatedAt": "2025-09-09T05:41:20.733Z",
+    "__v": 0
+  },
+  "message": "Success"
+}
+```
+
+### Errors
+
+- 404 - "User not found".
 - 401 - "Unauthorized".
 - 403 - "Forbidden"
 
