@@ -40,7 +40,7 @@ All requests requires an `Authorization` header.
 
 **Headers**
 
-- **Authorization:** `Bearer access_token`
+- **Authorization:** `access_token`
 - **Content-type:** `application/json`
 
 **body**
@@ -56,5 +56,35 @@ All requests requires an `Authorization` header.
   "city": "Test City"
 }
 ```
+
+**response**
+
+```json
+{
+  "status": 201,
+  "details": [
+    {
+      "_id": "6514e09c8a5b72c7ac8f9a11",
+
+      "username": "johndoe",
+      "password": "j0hnDo3123",
+      "fullname": "John Doe",
+      "email": "johndoe@gmail.com",
+      "contact_number": "09123456789",
+      "address": "Test Address",
+      "city": "Test City",
+      "createdAt": "2025-09-28T09:30:00.123Z",
+      "updatedAt": "2025-09-28T09:30:00.123Z",
+      "__v": 0
+    }
+  ],
+  "message": "User registered successfully"
+}
+```
+
+### Errors
+
+- 400 - "Username already exists".
+- 422 - "missing required fields"/ "Unknown fields".
 
 ---
