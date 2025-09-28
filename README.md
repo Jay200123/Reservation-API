@@ -63,6 +63,8 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 
 ---
 
+## AUTH API
+
 ### Register User API
 
 **Method:** `POST`
@@ -420,7 +422,7 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 **Endpoint:**
 `/api/v1/user/edit/:id`
 
-**parameters**
+**Parameters**
 
 - id - unique user ID.
 
@@ -463,5 +465,191 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 - 404 - "User not found".
 - 401 - "Unauthorized".
 - 403 - "Forbidden"
+
+---
+
+## SERVICES API
+
+### GET ALL SERVICES API
+
+**Method:** `GET`
+
+**Endpoint:**
+`/api/v1/services`
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**response**
+
+```json
+{
+  "status": 200,
+  "details": [
+    {
+      "_id": "68ca7274cd30a085301cac7f",
+      "service_name": "Service 1",
+      "service_price": 150,
+      "description": "Lorem Ipsum",
+      "duration": "1 hour",
+      "createdAt": "2025-09-17T08:33:56.957Z",
+      "updatedAt": "2025-09-17T08:33:56.957Z",
+      "__v": 0
+    },
+    {
+      "_id": "68ca72d177828cebe1a8ff00",
+      "service_name": "Service updated 1",
+      "service_price": 250,
+      "description": "Lorem Ipsum",
+      "duration": "1 hour",
+      "createdAt": "2025-09-17T08:35:29.434Z",
+      "updatedAt": "2025-09-17T08:35:29.434Z",
+      "__v": 0
+    }
+  ],
+  "message": "Success"
+}
+```
+
+### Errors
+
+- 404 - "Services not found".
+- 401 - "Unauthorized".
+- 403 - "Forbidden"
+
+### GET SERVICE BY API
+
+**Method:** `GET`
+
+**Endpoint:**
+`/api/v1/service/:id`
+
+**Parameters:**
+
+- id - unique service ID.
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**response**
+
+```json
+{
+  "status": 200,
+  "details": {
+    "_id": "68ca7274cd30a085301cac7f",
+    "service_name": "Service 1",
+    "service_price": 150,
+    "description": "Lorem Ipsum",
+    "duration": "1 hour",
+    "createdAt": "2025-09-17T08:33:56.957Z",
+    "updatedAt": "2025-09-17T08:33:56.957Z",
+    "__v": 0
+  },
+  "message": "Success"
+}
+```
+
+### Errors
+
+- 404 - "Services not found".
+- 401 - "Unauthorized".
+- 403 - "Forbidden".
+- 400 - "Invalid Request/Missing service ID".
+
+### CREATE SERVICE API
+
+**Method:** `POST`
+
+**Endpoint:**
+`/api/v1/services`
+
+**Body**
+
+```json
+{
+  "service_name": "Service 3",
+  "service_price": 150.0,
+  "duration": "1 hour",
+  "description": "Lorem Ipsum"
+}
+```
+
+**Response**
+
+```json
+{
+  "status": 201,
+  "details": {
+    "service_name": "Service 3",
+    "service_price": 150,
+    "description": "Lorem Ipsum",
+    "duration": "1 hour",
+    "_id": "68d9576a1af5b6b59cda765e",
+    "createdAt": "2025-09-28T15:42:34.810Z",
+    "updatedAt": "2025-09-28T15:42:34.810Z",
+    "__v": 0
+  },
+  "message": "New service created successfully."
+}
+```
+
+### Errors
+
+- 401 - "Unauthorized".
+- 403 - "Forbidden".
+- 422 - "Missing required fields/Unknown fields".
+
+### EDIT SERVICE API
+
+**Method:** `PATCH`
+
+**Endpoint:**
+`/api/v1/edit/service/:id`
+
+**Parameters**
+
+- id - unique service ID.
+
+**Body**
+
+```json
+{
+  "service_name": "Updated Service 3",
+  "service_price": 150.0,
+  "duration": "1 hour",
+  "description": "Lorem Ipsum Dolor Es Qui"
+}
+```
+
+**Response**
+
+```json
+{
+  "status": 200,
+  "details": {
+    "_id": "68ca72d177828cebe1a8ff00",
+    "service_name": "Updated Service 3",
+    "service_price": 150,
+    "description": "Lorem Ipsum Dolor Es Qui",
+    "duration": "1 hour",
+    "createdAt": "2025-09-17T08:35:29.434Z",
+    "updatedAt": "2025-09-17T08:35:29.434Z",
+    "__v": 0
+  },
+  "message": "Service updated successfully."
+}
+```
+
+### Errors
+
+- 401 - "Unauthorized".
+- 403 - "Forbidden".
+- 422 - "Missing required fields/Unknown fields".
+- 400 - "Invalid Request/Missing service ID".
 
 ---
