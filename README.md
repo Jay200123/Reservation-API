@@ -26,3 +26,31 @@ All requests requires an `Authorization` header.
 
 - **Role based Authentication**
   Some API's are restricted to specific users (e.g. `admin`, `user`)
+
+### Register User API
+
+**Method:** `POST`
+
+**Endpoint:**
+`/api/v1/register`
+
+**Headers**
+
+- **Authorization:** `Bearer access_token`
+- **Content-type:** `application/json`
+
+**body**
+
+```json
+{
+  "username": "johndoe",
+  "password": "j0hnDo3123",
+  "fullname": "John Doe",
+  "email": "johndoe@gmail.com",
+  "contact_number": "09123456789",
+  "address": "Test Address",
+  "city": "Test City"
+}
+```
+
+---
