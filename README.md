@@ -14,6 +14,8 @@ npm install
 npm run dev
 ```
 
+---
+
 ### Authorization
 
 All requests requires an `Authorization` header.
@@ -26,6 +28,8 @@ All requests requires an `Authorization` header.
 
 - **Role based Authentication**
   Some API's are restricted to specific users (e.g. `admin`, `user`)
+
+---
 
 ### Register User API
 
