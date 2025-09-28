@@ -412,3 +412,56 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 - 403 - "Forbidden"
 
 ---
+
+### UPDATE USER BY ID API
+
+**Method:** `PATCH`
+
+**Endpoint:**
+`/api/v1/user/edit/:id`
+
+**parameters**
+
+- id - unique user ID.
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**body**
+
+```json
+{
+  "contact_number": "091124671235"
+}
+```
+
+**response**
+
+```json
+{
+  "status": 200,
+  "details": {
+    "_id": "68bfbe00ec958d03b007fe13",
+    "user": "68bfbe00ec958d03b007fe11",
+    "fullname": "John Doe",
+    "email": "john.doe@gmail.com",
+    "contact_number": "091124671235",
+    "address": "New Orleans Washington",
+    "city": "Chicago",
+    "createdAt": "2025-09-09T05:41:20.733Z",
+    "updatedAt": "2025-09-28T06:17:14.470Z",
+    "__v": 0
+  },
+  "message": "Success"
+}
+```
+
+### Errors
+
+- 404 - "User not found".
+- 401 - "Unauthorized".
+- 403 - "Forbidden"
+
+---
