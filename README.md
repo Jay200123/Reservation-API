@@ -183,3 +183,33 @@ All requests requires an `Authorization` header.
 - 403 - "Forbidden"
 
 ---
+
+### Logout API
+
+**Method:** `POST`
+
+**Endpoint:**
+`/api/v1/logout`
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**response**
+
+```json
+{
+  "status": 200,
+  "details": [],
+  "message": "Logout successfully"
+}
+```
+
+### Errors
+
+- 400 - "Invalid Request".
+- 401 - "Unauthorized".
+- 403 - "Forbidden"
+
+---
