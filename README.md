@@ -63,7 +63,7 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 
 ---
 
-## AUTH API
+## AUTH API's
 
 ### Register User API
 
@@ -248,7 +248,7 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 
 ---
 
-## USERS API
+## USER API's
 
 ### GET ALL USERS API
 
@@ -468,7 +468,7 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 
 ---
 
-## SERVICES API
+## SERVICE API's
 
 ### GET ALL SERVICES API
 
@@ -651,5 +651,199 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 - 403 - "Forbidden".
 - 422 - "Missing required fields/Unknown fields".
 - 400 - "Invalid Request/Missing service ID".
+
+---
+
+## TIMESLOT API's
+
+### GET ALL TIMESLOT API
+
+**Method:** `GET`
+
+**Endpoint:**
+`/api/v1/timeslots`
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**Response**
+
+```json
+{
+  "status": 200,
+  "details": [
+    {
+      "_id": "68cbe84860c6e666efcdff2c",
+      "start_time": "08:00 A.M",
+      "end_time": "09:00 A.M",
+      "createdAt": "2025-09-18T11:08:56.646Z",
+      "updatedAt": "2025-09-18T11:08:56.646Z",
+      "__v": 0
+    },
+    {
+      "_id": "68d10f5fbd04042bdaee1044",
+      "start_time": "09:00 A.M",
+      "end_time": "10:00 A.M",
+      "createdAt": "2025-09-22T08:57:03.959Z",
+      "updatedAt": "2025-09-22T08:57:03.959Z",
+      "__v": 0
+    },
+    {
+      "_id": "68d10f70bd04042bdaee1049",
+      "start_time": "10:00 A.M",
+      "end_time": "11:00 A.M",
+      "createdAt": "2025-09-22T08:57:20.151Z",
+      "updatedAt": "2025-09-22T08:57:20.151Z",
+      "__v": 0
+    },
+    {
+      "_id": "68d10f7abd04042bdaee104c",
+      "start_time": "11:00 A.M",
+      "end_time": "12:00 P.M",
+      "createdAt": "2025-09-22T08:57:30.053Z",
+      "updatedAt": "2025-09-22T08:57:30.053Z",
+      "__v": 0
+    }
+  ],
+  "message": "Success"
+}
+```
+
+### Errors
+
+- 404 - "Timeslots not found".
+- 401 - "Unauthorized".
+- 403 - "Forbidden".
+
+### GET TIMESLOT BY ID API
+
+**Method:** `GET`
+
+**Endpoint:**
+`/api/v1/timeslot/:id`
+
+**Parameter**
+
+- id - unique timeslot ID.
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**Response**
+
+```json
+{
+  "status": 200,
+  "details": {
+    "_id": "68cbe84860c6e666efcdff2c",
+    "start_time": "08:00 A.M",
+    "end_time": "09:00 A.M",
+    "createdAt": "2025-09-18T11:08:56.646Z",
+    "updatedAt": "2025-09-18T11:08:56.646Z",
+    "__v": 0
+  },
+  "message": "Success"
+}
+```
+
+### Errors
+
+- 400 - "Invalid Request/Missing timeslot ID".
+- 401 - "Unauthorized".
+- 403 - "Forbidden".
+- 404 - "Timeslot not found".
+
+### CREATE TIMESLOT API
+
+**Method:** `POST`
+
+**Endpoint:**
+`/api/v1/timeslots`
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**Body**
+
+```json
+{
+  "start_time": "01:00 P.M",
+  "end_time": "02:00 P.M"
+}
+```
+
+**Response**
+
+```json
+{
+  "status": 201,
+  "details": {
+    "start_time": "01:00 P.M",
+    "end_time": "02:00 P.M",
+    "_id": "68d95ae21af5b6b59cda7668",
+    "createdAt": "2025-09-28T15:57:22.592Z",
+    "updatedAt": "2025-09-28T15:57:22.592Z",
+    "__v": 0
+  },
+  "message": "Timeslot created successfully."
+}
+```
+
+### Errors
+
+- 401 - "Unauthorized".
+- 403 - "Forbidden".
+- 422 - "Missing required fields/Unknown fields".
+
+### UPDATE TIMESLOT BY ID API
+
+**Method:** `PATCH`
+
+**Endpoint:**
+`/api/v1/edit/timeslot/:id`
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**Body**
+
+```json
+{
+  "start_time": "01:30 P.M",
+  "end_time": "02:30 P.M"
+}
+```
+
+**Response**
+
+```json
+{
+  "status": 200,
+  "details": {
+    "_id": "68d95ae21af5b6b59cda7668",
+    "start_time": "01:30 P.M",
+    "end_time": "02:30 P.M",
+    "createdAt": "2025-09-28T15:57:22.592Z",
+    "updatedAt": "2025-09-28T16:01:50.409Z",
+    "__v": 0
+  },
+  "message": "Timeslot updated successfully."
+}
+```
+
+### Errors
+
+- 400 - "Invalid Request/Missing timeslot ID".
+- 401 - "Unauthorized".
+- 403 - "Forbidden".
+- 422 - "Missing required fields/Unknown fields".
 
 ---
