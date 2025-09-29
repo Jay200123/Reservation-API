@@ -42,6 +42,8 @@ export default class AuthController {
       },
     });
 
+    validateFields(req);
+
     const result = await this.authService.loginUser(req.body);
 
     logger.info({
