@@ -1150,3 +1150,128 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 - These credentials work only in the PayMaya Sandbox environment — they will not process real payments.
 - Use them to test different checkout flows (successful payments, declines, etc.).
 - For real payments, you’ll need to switch from Sandbox to Production keys in your PayMaya account.
+
+### UPDATE RESERVATION STATUS BY ID API
+
+**Method:** `PATCH`
+
+**Endpoint:**
+`/api/v1/reservation/status/:id`
+
+**Parameters**
+
+- id - unique reservation ID.
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**Body**
+
+```json
+{
+  "status": "PENDING"
+}
+```
+
+**Response**
+
+```json
+{
+  "status": 200,
+  "details": {
+    "_id": "68d26ccc81d47a0911bf12c4",
+    "user": "68c92931b00d0f36a921e688",
+    "services": [
+      {
+        "service": "68ca7274cd30a085301cac7f",
+        "_id": "68d26ccc81d47a0911bf12c5"
+      },
+      {
+        "service": "68ca72d177828cebe1a8ff00",
+        "_id": "68d26ccc81d47a0911bf12c6"
+      }
+    ],
+    "timeslot": "68cbe84860c6e666efcdff2c",
+    "payment_type": "CASH",
+    "status": "PENDING",
+    "amount": 400,
+    "reservation_date": "2025-09-22T00:00:00.000Z",
+    "createdAt": "2025-09-23T09:47:56.687Z",
+    "updatedAt": "2025-09-23T09:47:56.687Z",
+    "__v": 0
+  },
+  "message": "Reservation updated successfully."
+}
+```
+
+### Errors
+
+- 400 - "Invalid Request/Missing reservation ID".
+- 401 - "Unauthorized".
+- 403 - "Forbidden".
+- 422 - "Missing required fields/Unknown fields".
+
+### RESCHEDULE RESERVATION API
+
+**Method:** `PATCH`
+
+**Endpoint:**
+`/api/v1/reservation/reschedule/:id`
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**Body**
+
+```json
+{
+  "timeslot": "68cbe84860c6e666efcdff2c",
+  "reservation_date": "2025-10-02", // YYYY-MM-DD
+  "reason": "Has urgent meeting related to corporate work."
+}
+```
+
+**Response**
+
+```json
+{
+  "status": 200,
+  "details": {
+    "_id": "68d26ccc81d47a0911bf12c4",
+    "user": "68c92931b00d0f36a921e688",
+    "services": [
+      {
+        "service": "68ca7274cd30a085301cac7f",
+        "_id": "68d26ccc81d47a0911bf12c5"
+      },
+      {
+        "service": "68ca72d177828cebe1a8ff00",
+        "_id": "68d26ccc81d47a0911bf12c6"
+      }
+    ],
+    "timeslot": "68cbe84860c6e666efcdff2c",
+    "payment_type": "CASH",
+    "status": "RESCHEDULED",
+    "amount": 400,
+    "reservation_date": "2025-10-02T00:00:00.000Z",
+    "createdAt": "2025-09-23T09:47:56.687Z",
+    "updatedAt": "2025-09-23T09:47:56.687Z",
+    "__v": 0,
+    "reason": "Has urgent meeting related to corporate work."
+  },
+  "message": "Reservation rescheduled successfully."
+}
+```
+
+### Errors
+
+- 400 - "Invalid Request/Missing reservation ID".
+- 401 - "Unauthorized".
+- 403 - "Forbidden".
+- 422 - "Missing required fields/Unknown fields".
+
+---
