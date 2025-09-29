@@ -1038,6 +1038,56 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 - **Authorization:** `access_token`
 - **Content-type:** `application/json`
 
+### With payment `CASH` type.
+
+**Body**
+
+```json
+{
+  "user": "68c92931b00d0f36a921e686",
+  "services": [
+    {
+      "service": "68ca7274cd30a085301cac7f"
+    }
+  ],
+  "timeslot": "68cbe84860c6e666efcdff2c",
+  "payment_type": "CASH",
+  "reservation_date": "2025-10-01"
+}
+```
+
+**Response**
+
+```json
+{
+  "status": 200,
+  "details": {
+    "0": {
+      "user": "68c92931b00d0f36a921e686",
+      "services": [
+        {
+          "service": "68ca7274cd30a085301cac7f",
+          "_id": "68d9f2cdda1b463ba47d8c84"
+        }
+      ],
+      "timeslot": "68cbe84860c6e666efcdff2c",
+      "payment_type": "CASH",
+      "status": "PENDING",
+      "amount": 150,
+      "reservation_date": "2025-10-01T00:00:00.000Z",
+      "_id": "68d9f2cdda1b463ba47d8c83",
+      "createdAt": "2025-09-29T02:45:33.347Z",
+      "updatedAt": "2025-09-29T02:45:33.347Z",
+      "__v": 0
+    },
+    "payment": {}
+  },
+  "message": "Reservations created successfully"
+}
+```
+
+### With payment `ONLINE_PAYMENT` type.
+
 **Body**
 
 ```json
