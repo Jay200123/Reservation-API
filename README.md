@@ -1104,8 +1104,6 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 }
 ```
 
-- Request body with payment type `ONLINE_PAYMENT`
-
 **Response**
 
 ```json
