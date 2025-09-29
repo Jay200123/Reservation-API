@@ -1230,7 +1230,7 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 ```json
 {
   "timeslot": "68cbe84860c6e666efcdff2c",
-  "reservation_date": "2025-10-02", // YYYY-MM-DD
+  "reservation_date": "2025-10-02",
   "reason": "Has urgent meeting related to corporate work."
 }
 ```
