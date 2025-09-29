@@ -1151,6 +1151,8 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 - Use them to test different checkout flows (successful payments, declines, etc.).
 - For real payments, you’ll need to switch from Sandbox to Production keys in your PayMaya account.
 
+---
+
 ### UPDATE RESERVATION STATUS BY ID API
 
 **Method:** `PATCH`
