@@ -847,3 +847,258 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 - 422 - "Missing required fields/Unknown fields".
 
 ---
+
+## Reservation API's
+
+### GET ALL RESERVATIONS API
+
+**Method:** `GET`
+
+**Endpoint:**
+`/api/v1/reservations`
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**Response**
+
+```json
+{
+  "status": 200,
+  "details": [
+    {
+      "_id": "68d26ccc81d47a0911bf12c4",
+      "user": "68c92931b00d0f36a921e688",
+      "services": [
+        {
+          "service": "68ca7274cd30a085301cac7f",
+          "_id": "68d26ccc81d47a0911bf12c5"
+        },
+        {
+          "service": "68ca72d177828cebe1a8ff00",
+          "_id": "68d26ccc81d47a0911bf12c6"
+        }
+      ],
+      "timeslot": "68cbe84860c6e666efcdff2c",
+      "payment_type": "CASH",
+      "status": "PENDING",
+      "amount": 400,
+      "reservation_date": "2025-09-22T00:00:00.000Z",
+      "createdAt": "2025-09-23T09:47:56.687Z",
+      "updatedAt": "2025-09-23T09:47:56.687Z",
+      "__v": 0
+    },
+    {
+      "_id": "68d7cd596d8e403e4825826f",
+      "user": "68c92931b00d0f36a921e686",
+      "services": [
+        {
+          "service": "68ca7274cd30a085301cac7f",
+          "_id": "68d7cd596d8e403e48258270"
+        }
+      ],
+      "timeslot": "68cbe84860c6e666efcdff2c",
+      "payment_type": "ONLINE_PAYMENT",
+      "status": "PENDING",
+      "amount": 150,
+      "reservation_date": "2025-09-27T00:00:00.000Z",
+      "createdAt": "2025-09-27T11:41:13.016Z",
+      "updatedAt": "2025-09-27T11:41:13.016Z",
+      "__v": 0
+    },
+    {
+      "_id": "68d7cd8e9d14e3303f49a2d2",
+      "user": "68c92931b00d0f36a921e686",
+      "services": [
+        {
+          "service": "68ca7274cd30a085301cac7f",
+          "_id": "68d7cd8e9d14e3303f49a2d3"
+        }
+      ],
+      "timeslot": "68cbe84860c6e666efcdff2c",
+      "payment_type": "ONLINE_PAYMENT",
+      "status": "PENDING",
+      "amount": 150,
+      "reservation_date": "2025-09-27T00:00:00.000Z",
+      "createdAt": "2025-09-27T11:42:06.473Z",
+      "updatedAt": "2025-09-27T11:42:06.473Z",
+      "__v": 0
+    },
+    {
+      "_id": "68d7cdc3e387e86e89ac07fd",
+      "user": "68c92931b00d0f36a921e686",
+      "services": [
+        {
+          "service": "68ca7274cd30a085301cac7f",
+          "_id": "68d7cdc3e387e86e89ac07fe"
+        }
+      ],
+      "timeslot": "68cbe84860c6e666efcdff2c",
+      "payment_type": "ONLINE_PAYMENT",
+      "status": "PENDING",
+      "amount": 150,
+      "reservation_date": "2025-09-27T00:00:00.000Z",
+      "createdAt": "2025-09-27T11:42:59.297Z",
+      "updatedAt": "2025-09-27T11:42:59.297Z",
+      "__v": 0
+    },
+    {
+      "_id": "68d7cecfc5ef765dccf9af73",
+      "user": "68c92931b00d0f36a921e686",
+      "services": [
+        {
+          "service": "68ca7274cd30a085301cac7f",
+          "_id": "68d7cecfc5ef765dccf9af74"
+        }
+      ],
+      "timeslot": "68cbe84860c6e666efcdff2c",
+      "payment_type": "ONLINE_PAYMENT",
+      "status": "PENDING",
+      "amount": 150,
+      "reservation_date": "2025-09-27T00:00:00.000Z",
+      "createdAt": "2025-09-27T11:47:27.194Z",
+      "updatedAt": "2025-09-27T11:47:27.194Z",
+      "__v": 0
+    }
+  ],
+  "message": "Reservations retrieved successfully"
+}
+```
+
+### Errors
+
+- 404 - "Reservations not found".
+- 401 - "Unauthorized".
+- 403 - "Forbidden".
+
+### GET RESERVATION BY ID API
+
+**Method:** `GET`
+
+**Endpoint:**
+`/api/v1/reservation/:id`
+
+**Parameters**
+
+- id - unique reservation ID.
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**Response**
+
+```json
+{
+  "status": 200,
+  "details": {
+    "_id": "68d26ccc81d47a0911bf12c4",
+    "user": "68c92931b00d0f36a921e688",
+    "services": [
+      {
+        "service": "68ca7274cd30a085301cac7f",
+        "_id": "68d26ccc81d47a0911bf12c5"
+      },
+      {
+        "service": "68ca72d177828cebe1a8ff00",
+        "_id": "68d26ccc81d47a0911bf12c6"
+      }
+    ],
+    "timeslot": "68cbe84860c6e666efcdff2c",
+    "payment_type": "CASH",
+    "status": "PENDING",
+    "amount": 400,
+    "reservation_date": "2025-09-22T00:00:00.000Z",
+    "createdAt": "2025-09-23T09:47:56.687Z",
+    "updatedAt": "2025-09-23T09:47:56.687Z",
+    "__v": 0
+  },
+  "message": "Reservation retrieved successfully"
+}
+```
+
+### Errors
+
+- 400 - "Invalid Request/Missing reservation ID".
+- 401 - "Unauthorized".
+- 403 - "Forbidden".
+
+### CREATE RESERVATION API
+
+**Method:** `POST`
+
+**Endpoint:**
+`/api/v1/reservations`
+
+**Headers**
+
+- **Authorization:** `access_token`
+- **Content-type:** `application/json`
+
+**Body**
+
+```json
+{
+  "user": "68c92931b00d0f36a921e686",
+  "services": [
+    {
+      "service": "68ca7274cd30a085301cac7f"
+    }
+  ],
+  "timeslot": "68cbe84860c6e666efcdff2c",
+  "payment_type": "ONLINE_PAYMENT",
+  "reservation_date": "2025-09-30"
+}
+```
+
+- Request body with payment type `ONLINE_PAYMENT`
+
+**Response**
+
+```json
+{
+  "status": 200,
+  "details": {
+    "0": {
+      "user": "68c92931b00d0f36a921e686",
+      "services": [
+        {
+          "service": "68ca7274cd30a085301cac7f",
+          "_id": "68d9ef81da1b463ba47d8c78"
+        }
+      ],
+      "timeslot": "68cbe84860c6e666efcdff2c",
+      "payment_type": "ONLINE_PAYMENT",
+      "status": "PENDING",
+      "amount": 150,
+      "reservation_date": "2025-09-30T00:00:00.000Z",
+      "_id": "68d9ef81da1b463ba47d8c77",
+      "createdAt": "2025-09-29T02:31:29.341Z",
+      "updatedAt": "2025-09-29T02:31:29.341Z",
+      "__v": 0
+    },
+    "payment": {
+      "checkoutId": "d90e71ab-93b2-42b3-87e4-23917a61666b",
+      "redirectUrl": "https://payments-web-sandbox.maya.ph/v2/checkout?id=d90e71ab-93b2-42b3-87e4-23917a61666b"
+    }
+  },
+  "message": "Reservations created successfully"
+}
+```
+
+- When using the PayMaya Sandbox environment, a payment link will be generated. The customer can use this link to simulate an online payment flow (checkout, entering card details, success/failure, etc.).
+
+### PayMaya Sandbox Test Card Payment Credentials
+
+- **Card Number:** `5123456789012346`
+- **Expiry Month & Year:** `12/25`
+- **CSC/CVV**: `111`
+
+### Notes
+
+- These credentials work only in the PayMaya Sandbox environment — they will not process real payments.
+- Use them to test different checkout flows (successful payments, declines, etc.).
+- For real payments, you’ll need to switch from Sandbox to Production keys in your PayMaya account.
