@@ -1,12 +1,13 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-import { Database } from "./src/@config";
+import { Database, corsOptions } from "./src/@config";
 import { logger } from "./src/@utils";
 import { ErrorMiddleware } from "./src/@middleware";
 import { PATH } from "./src/@constants";
 import { users, auth, service, timeslot, reservation } from "./src/@routes";
 import mongoose from "mongoose";
 import axios from "axios";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -16,6 +17,22 @@ const app = express();
  */
 Database.connect(process.env.DATABASE_URI as string);
 
+/**
+ * Enables Cross-Origin Resource Sharing (CORS) for the Express app.
+ *
+ * This middleware allows the server to accept requests from specific origins
+ * defined in the `corsOptions` configuration. It helps prevent unauthorized
+ * cross-origin requests while still enabling trusted domains (whitelisted)
+ * to interact with the backend API.
+ *
+ * @remarks
+ * - Uses the `cors` package.
+ * - The `corsOptions` object defines allowed origins, credentials, and headers.
+ * - If an origin is not in the whitelist, a CORS error will be returned.
+ *
+ * @see https://expressjs.com/en/resources/middleware/cors.html
+ */
+app.use(cors(corsOptions));
 /**
  * Middleware to parse incoming JSON payloads.
  * Required for handling requests with "Content-Type: application/json"
