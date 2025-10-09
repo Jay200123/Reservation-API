@@ -10,7 +10,7 @@ import { JWTPayload } from "../@types";
 export class JWT {
   generateAccessToken(payload: JWTPayload) {
     return jwt.sign(payload, process.env.JWT_ACCESS_SECRET_KEY as string, {
-      expiresIn: "1h",
+      expiresIn: "5min",
     });
   }
 
