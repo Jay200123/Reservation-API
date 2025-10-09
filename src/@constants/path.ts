@@ -5,7 +5,7 @@ export const PATH = {
   REFRESH: "/refresh",
   LOGOUT: "/logout",
   USERS: "/users",
-  USER_ID: "/users/:id",
+  USER_ID: "/user/:id",
   EDIT_USER_ID: "/user/edit/:id",
   SERVICES: "/services",
   SERVICE_ID: "/service/:id",
