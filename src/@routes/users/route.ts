@@ -50,7 +50,7 @@ router.get(
 router.get(
   PATH.USER_ID,
   authMiddleware.AccessTokenVerifier(),
-  authMiddleware.UserRoleVerifier(ROLE.ADMIN),
+  authMiddleware.UserRoleVerifier(ROLE.ADMIN, ROLE.USER),
   userController.getUserById
 );
 
