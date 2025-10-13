@@ -5,3 +5,4 @@ export * from "./validationResults";
 export * from "./verifyFields";
 export * from "./allowedFields";
 export * from "./jwt";
+export * from "./fileUpload";
