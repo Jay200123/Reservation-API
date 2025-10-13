@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { Database, corsOptions } from "./src/@config";
-import { logger } from "./src/@utils";
+import { logger, upload } from "./src/@utils";
 import { ErrorMiddleware } from "./src/@middleware";
 import { PATH } from "./src/@constants";
 import { users, auth, service, timeslot, reservation } from "./src/@routes";
@@ -45,6 +45,14 @@ app.use(express.json());
  * "extended: true" enables parsing of nested objects.
  **/
 app.use(express.urlencoded({ extended: true }));
+
+/**
+ * Middleware for handling multiple file uploads using Multer.
+ *
+ * Accepts multiple files sent through the "image" field in the request.
+ * Each file is validated and stored according to the configured Multer settings.
+ */
+app.use(upload.array("image"));
 
 app.get("/", (req: Request, res: Response) => {
   return res.status(200).json({
@@ -148,6 +156,26 @@ app.get("/cancel", async (req, res) => {
 
   res.status(200).json({
     message: msg,
+  });
+});
+
+app.post("/upload", async (req, res) => {
+  logger.info({
+    UPLOAD_FILE_REQUEST: {
+      message: "SUCCESS",
+    },
+  });
+
+  console.log(req.files);
+
+  logger.info({
+    UPLOAD_FILE_RESPONSE: {
+      message: "SUCCESS",
+    },
+  });
+
+  return res.status(200).json({
+    message: "File uploaded sucessfully.",
   });
 });
 
