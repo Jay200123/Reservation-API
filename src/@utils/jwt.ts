@@ -44,7 +44,7 @@ export class JWT {
       (err: jwt.VerifyErrors | null, decoded: any) => {
         if (err) {
           logger.info({
-            JWT_ACCESS_TOKEN_VERIFY_ERROR: {
+            JWT_REFRESH_TOKEN_VERIFY_ERROR: {
               message: "Refresh token verification failed.",
               error: err,
             },
