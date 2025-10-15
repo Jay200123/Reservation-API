@@ -6,6 +6,7 @@ const createUserFields = [
   "contact_number",
   "address",
   "city",
+  "image",
 ];
 
 const updateUserFields = ["contact_number", "address", "city"];
@@ -15,6 +16,7 @@ const createServiceFields = [
   "service_price",
   "description",
   "duration",
+  "image",
 ];
 
 const createTimeslotFields = ["start_time", "end_time"];
