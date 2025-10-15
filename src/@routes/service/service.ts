@@ -4,7 +4,7 @@ import {
   logger,
   verifyFields,
   createServiceFields,
-  createUserFields,
+  uploadImage,
 } from "../../@utils";
 import { STATUSCODE } from "../../@constants";
 import mongoose from "mongoose";
@@ -46,7 +46,11 @@ export default class ServiceServices {
     return result;
   }
 
-  async createService(data: Omit<Service, "createdAt" | "updatedAt">) {
+  async createService(
+    data: Omit<Service, "createdAt" | "updatedAt"> & {
+      image: Express.Multer.File[];
+    }
+  ) {
     /**
      * Verifies that all required fields exist in the given data object, if an unknown field exists it will throw an Error
      * @param fields - An array of required field names to check (e.g. createUserFields).
@@ -54,7 +58,12 @@ export default class ServiceServices {
      */
     verifyFields(createServiceFields, data);
 
-    const result = await this.serviceRepository.create(data);
+    const image = await uploadImage(data.image, []);
+
+    const result = await this.serviceRepository.create({
+      ...data,
+      image: image,
+    });
 
     return result;
   }
