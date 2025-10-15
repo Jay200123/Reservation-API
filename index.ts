@@ -60,127 +60,16 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-app.post("/payment", async (req, res) => {
-  logger.info({
-    TESTING_PAYMENT_API_REQUEST: {
-      message: "SUCESS",
-    },
-  });
-
-  try {
-    //v1
-    const response = await axios.post(
-      `${process.env.MAYA_SANDBOX_BASE_URL}/checkout/v1/checkouts`,
-      req.body,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Basic ${Buffer.from(
-            `${process.env.MAYA_PUBLIC_KEY}` + ":"
-          ).toString("base64")}`,
-        },
-      }
-    );
-
-    res.status(200).json(response.data);
-  } catch (err: any) {
-    console.log(err.response.data);
-
-    res.status(400).json({
-      message: "Payment API Failed",
-    });
-  }
-
-  logger.info({
-    TESTING_PAYMENT_API_RESPONSE: {
-      message: "SUCCESS",
-    },
-  });
-});
-
-//mock payment success endpoint
-app.get("/success", async (req, res) => {
-  logger.info({
-    TESTING_PAYMENT_API_SUCCESS_REQUEST: {
-      message: "SUCESS",
-    },
-  });
-
-  const msg = "Payment Success";
-
-  logger.info({
-    TESTING_PAYMENT_API_SUCCESS_RESPONSE: {
-      message: "SUCCESS",
-    },
-  });
-
-  res.status(200).json({
-    message: msg,
-  });
-});
-
-app.get("/failure", async (req, res) => {
-  logger.info({
-    TESTING_PAYMENT_API_FAILURE_REQUEST: {
-      message: "SUCESS",
-    },
-  });
-
-  const msg = "Payment Failure";
-
-  logger.info({
-    TESTING_PAYMENT_API_FAILURE_RESPONSE: {
-      message: "SUCCESS",
-    },
-  });
-
-  res.status(200).json({
-    message: msg,
-  });
-});
-
-app.get("/cancel", async (req, res) => {
-  logger.info({
-    TESTING_PAYMENT_API_CANCEL_REQUEST: {
-      message: "SUCESS",
-    },
-  });
-
-  const msg = "Payment Cancelled";
-
-  logger.info({
-    TESTING_PAYMENT_API_CANCEL_RESPONSE: {
-      message: "SUCCESS",
-    },
-  });
-
-  res.status(200).json({
-    message: msg,
-  });
-});
-
-app.post("/upload", async (req, res) => {
-  logger.info({
-    UPLOAD_FILE_REQUEST: {
-      message: "SUCCESS",
-    },
-  });
-
-  console.log(req.files);
-
-  logger.info({
-    UPLOAD_FILE_RESPONSE: {
-      message: "SUCCESS",
-    },
-  });
-
-  return res.status(200).json({
-    message: "File uploaded sucessfully.",
-  });
-});
 
 // Set up the base route for all API v1 endpoints
-app.use(PATH.API, auth, users, service, timeslot, reservation);
+app.use(
+  PATH.API, 
+  auth, 
+  users, 
+  service, 
+  timeslot, 
+  reservation
+);
 
 app.all("/*splat", (req: Request, res: Response) => {
   return res.status(405).json({

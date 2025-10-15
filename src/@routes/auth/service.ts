@@ -5,6 +5,7 @@ import {
   createUserFields,
   logger,
   JWT,
+  uploadImage,
 } from "../../@utils";
 import AuthRepository from "./repository";
 import UserRepository from "../users/repository";
@@ -27,7 +28,7 @@ export default class AuthService {
    * @param data - req.body object that contains user information such as username, password fullname etc.
    * @returns
    */
-  async registerUser(data: UserType) {
+  async registerUser(data: UserType & { image: Express.Multer.File[] }) {
     /**
      * Verifies that all required fields exist in the given data object, if an unknown field exists it will throw an Error
      * @param fields - An array of required field names to check (e.g. createUserFields).
@@ -35,8 +36,11 @@ export default class AuthService {
      */
     verifyFields(createUserFields, data);
 
+    // Checks if the username registered by the user already exists.
+    //This is implemented to prevent duplicate username at the database.
     const user = await this.userRepository.getByUsername(data.username);
 
+    // if `user` has entry throws a bad request 400 Error.
     if (user) {
       throw new ErrorHandler(
         STATUSCODE.BAD_REQUEST,
@@ -46,6 +50,9 @@ export default class AuthService {
 
     //Hash password before saving to database
     const hashedPassword = await hashPassword(data.password);
+
+    //return image's public_id, url and originalname.
+    const image = await uploadImage(data.image, []);
 
     // Start a session for transaction
     const session = await mongoose.startSession();
@@ -81,6 +88,7 @@ export default class AuthService {
           contact_number: data.contact_number,
           address: data.address,
           city: data.city,
+          image: image,
         },
         { session }
       );
@@ -94,9 +102,11 @@ export default class AuthService {
         },
       };
     } catch (err) {
+      //if transaction catches error transaction would be aborted.
       await session.abortTransaction();
       throw err;
     } finally {
+      // end the mongoose session instance.
       await session.endSession();
     }
   }

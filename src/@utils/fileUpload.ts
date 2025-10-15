@@ -1,50 +1,64 @@
 import multer from "multer";
-import path from "path";
 import { generateRandomCharacters } from "./generateRandomCharacters";
 import { generateFormattedDate } from "./generateFormattedDate";
 import { logger } from "./logger";
+import { CloudinaryStorage } from "multer-storage-cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 
-const storage = multer.diskStorage({
-  /**
-   * Defines the destination directory for uploaded files on the server.
-   *
-   * @param req - The Express request object.
-   * @param file - The uploaded file object from the request.
-   * @param callback - A callback function to specify the destination path or return an error.
-   *
-   * Files will be stored in the `public/images` directory of the Node application upon successful upload.
-   */
-  destination: (req, file, callback) => {
-    callback(null, path.join(__dirname, "../../public/images"));
-  },
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_SECRET_KEY,
+});
 
-  /**
-   * Generates a custom filename for each uploaded file before saving it to the storage directory.
-   *
-   * The filename is composed of randomly generated characters, the current formatted date,
-   * and the file's original extension — ensuring each file has a unique and traceable name.
-   *
-   * Example output: `ABCDEF12102025.jpg`
-   *
-   * @param req - The Express request object.
-   * @param file - The uploaded file object from the request.
-   * @param callback - A callback function that returns the generated filename or an error.
-   */
-  filename: (req, file, callback) => {
-    // Generate a random 6-character string (e.g., "ABCDEF")
-    const randomCharacters = generateRandomCharacters();
+/**
+ * Cloudinary Storage Configuration (v2)
+ * -------------------------------------
+ * This configuration integrates Multer with Cloudinary for seamless image uploads.
+ * Instead of storing uploaded files locally, this setup automatically uploads them
+ * directly to your Cloudinary account.
+ *
+ * Each uploaded image is stored inside the `cloudinaryFiles` folder on Cloudinary
+ * with a dynamically generated `public_id` for uniqueness and traceability.
+ *
+ * The `public_id` format:
+ *    <original_filename>-<randomCharacters><formattedDate>
+ *
+ * Example:
+ *    "profile-picture-AB12CD-20251015"
+ *
+ * Dependencies:
+ *  - cloudinary: The Cloudinary SDK instance.
+ *  - CloudinaryStorage: Multer adapter for Cloudinary.
+ *  - generateRandomCharacters(): Utility that returns a short 6 character random string.
+ *  - generateFormattedDate(): Utility that returns a formatted date string. (ddmmyyyy)
+ *
+ * @constant
+ * @type {CloudinaryStorage}
+ * @description
+ * Defines a Multer-compatible storage engine that uploads image files
+ * directly to Cloudinary under the folder "cloudinaryFiles" and assigns
+ * each image a unique `public_id`.
+ *
+ * @example
+ * // Example usage with Multer:
+ * const upload = multer({ storage });
+ * app.post("/upload", upload.array("image"), (req, res) => {
+ *   res.status(200).json({ message: "Files uploaded to Cloudinary successfully" });
+ * });
+ */
+const randomCharacters = generateRandomCharacters();
+const formattedDate = generateFormattedDate();
 
-    // Generate the current formatted date (e.g., "12102025" for DDMMYYYY)
-    const formattedDate = generateFormattedDate();
-
-    // Retrieve the file's original extension (e.g., ".jpg", ".png", ".webp")
-    const fileExtension = path.extname(file.originalname);
-
-    // Combine all parts to create the final custom filename
-    const customFileName = `${randomCharacters}${formattedDate}${fileExtension}`; // e.g., "ABCDEF12102025.jpg"
-
-    callback(null, customFileName);
-  },
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary, // cloudinary config
+  params: async (req: Express.Request, file: Express.Multer.File) => ({
+    folder: "cloudinaryFiles",
+    public_id: `${file.originalname.replace(
+      /\.[^/.]+$/,
+      ""
+    )}-${randomCharacters}${formattedDate}`,
+  }),
 });
 
 /**
@@ -62,21 +76,25 @@ const fileFilter = (
   file: Express.Multer.File,
   callback: multer.FileFilterCallback
 ) => {
+  // Using JavaScript's "split" method, the file name is divided into an array to extract its file extension.
+  const fileType = file.originalname.split("."); // - ["image", "jpeg"];
+
   // Define allowed MIME types for image uploads.
   const allowedMimeTypes = [
-    "image/jpeg",
-    "image/jpg",
-    "image/png",
-    "image/jfif",
-    "image/webp",
-    "image/gif",
-    "image/heic",
-    "image/heif",
-    "image/svg+xml",
+    "jpeg",
+    "jpg",
+    "png",
+    "jfif",
+    "webp",
+    "gif",
+    "heic",
+    "heif",
+    "svg",
   ];
 
   // Reject the file if its MIME type is not in the allowed list.
-  if (!allowedMimeTypes.includes(file.mimetype)) {
+  // `fileType` - "jpeg".
+  if (!allowedMimeTypes.includes(fileType[1])) {
     logger.info({
       UPLOAD_FILE_ERROR: {
         message:
@@ -90,6 +108,83 @@ const fileFilter = (
   callback(null, true);
 };
 
+/**
+ * Uploads one or more image files to Cloudinary while removing any previously uploaded images.
+ *
+ * This helper function performs two main tasks:
+ * 1. Deletes existing Cloudinary images whose `public_id`s are provided.
+ * 2. Uploads new files from the provided array and returns metadata for each uploaded image.
+ *
+ * @async
+ * @function uploadImage
+ * @param {Express.Multer.File[]} files - An array of uploaded image files from Multer.
+ * @param {string[]} oldImagePublicIds - A list of Cloudinary `public_id`s to delete before uploading new files.
+ * @returns {Promise<Image[]>} A promise that resolves to an array of uploaded image metadata objects.
+ *
+ * @typedef {Object} Image
+ * @property {string} public_id - The Cloudinary public identifier of the uploaded image.
+ * @property {string} url - The secure Cloudinary URL of the uploaded image.
+ * @property {string} originalname - The original file name of the uploaded image.
+ *
+ * @example
+ * // Example usage in a controller:
+ * const uploadedImages = await uploadImage(req.files as Express.Multer.File[], ["old_public_id_1"]);
+ * console.log(uploadedImages);
+ */
+const uploadImage = async (
+  files: Express.Multer.File[],
+  oldImagePublicIds: string[]
+): Promise<
+  {
+    public_id: string;
+    url: string;
+    originalname: string;
+  }[]
+> => {
+  // Return an empty array if there are no files to upload.
+  if (!files || !Array.isArray(files) || files.length === 0) {
+    return [];
+  }
+
+  // Remove old images from Cloudinary if their public IDs are provided.
+  for (const publicId of oldImagePublicIds) {
+    if (publicId?.trim()) {
+      try {
+        await cloudinary.uploader.destroy(publicId);
+      } catch (error) {
+        console.error(`Failed to delete Cloudinary image: ${publicId}`, error);
+      }
+    }
+  }
+
+  // Upload all new files to Cloudinary concurrently.
+  const uploadResults = await Promise.all(
+    files.map(async (file) => {
+      try {
+        const result = await cloudinary.uploader.upload(file.path, {
+          public_id: file.filename,
+        });
+
+        return {
+          public_id: result.public_id,
+          url: result.secure_url,
+          originalname: file.originalname,
+        };
+      } catch (err) {
+        logger.info({
+          CLOUDINARY_FILE_UPLOAD_ERROR: {
+            message: `Failed to upload file: ${file.originalname}`,
+            err: err,
+          },
+        });
+        throw err;
+      }
+    })
+  );
+
+  // Return structured metadata for all successfully uploaded images.
+  return uploadResults;
+};
 /**
  * Multer configuration for handling file uploads.
  *
@@ -111,8 +206,8 @@ const upload: multer.Multer = multer({
   storage,
   fileFilter,
   limits: {
-    fieldSize: 5 * 1024 * 1024, // 5mb
+    fileSize: 5 * 1024 * 1024, // 5mb
   },
 });
 
-export { upload };
+export { upload, uploadImage };

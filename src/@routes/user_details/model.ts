@@ -33,6 +33,14 @@ const UserDetailsSchema = new mongoose.Schema<UserDetails>({
     required: true,
   },
 
+  image: [
+    {
+      public_id: String,
+      url: String,
+      originalname: String,
+    },
+  ],
+
   createdAt: {
     type: Date,
     default: Date.now,
