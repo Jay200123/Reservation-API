@@ -5,3 +5,4 @@ export * from "./models/service";
 export * from "./models/timeslots";
 export * from "./models/reservations";
 export * from "./middleware/index";
+export * from "./file";
