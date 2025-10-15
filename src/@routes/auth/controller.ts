@@ -19,7 +19,13 @@ export default class AuthController {
     // Validate request fields
     validateFields(req);
 
-    const result = await this.authService.registerUser(req.body);
+    
+    const result = await this.authService.registerUser({
+      ...req.body,
+      image: req.files,
+    });
+
+    // const result = "Working on Register API Feature.";
 
     logger.info({
       REGISTER_USER_RESPONSE: {
