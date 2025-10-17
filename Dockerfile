@@ -10,7 +10,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Run npm install command to install all of the libraries inside the package.json file
-RUN npm install
+RUN npm install --force
 
 # Copy all of the contents inside the project
 COPY . . 
