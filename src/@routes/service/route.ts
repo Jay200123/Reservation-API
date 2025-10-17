@@ -29,12 +29,7 @@ const authMiddleware = new AuthMiddleware(
 );
 
 //get all users endpoint.
-router.get(
-  PATH.SERVICES,
-  authMiddleware.AccessTokenVerifier(),
-  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
-  serviceController.getAllServices
-);
+router.get(PATH.SERVICES, serviceController.getAllServices);
 
 //get one user endpoint.
 router.get(
