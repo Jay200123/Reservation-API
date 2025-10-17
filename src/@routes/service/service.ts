@@ -8,7 +8,7 @@ import {
 } from "../../@utils";
 import { STATUSCODE } from "../../@constants";
 import mongoose from "mongoose";
-import { Service } from "../../@types";
+import { Service, Image } from "../../@types";
 export default class ServiceServices {
   constructor(private serviceRepository: ServiceRepository) {}
 
@@ -68,7 +68,26 @@ export default class ServiceServices {
     return result;
   }
 
-  async updateServiceById(id: string, data: Partial<Service>) {
+  /**
+   * Updates a service record by its unique ID.
+   *
+   * @param id - The unique identifier of the service to update.
+   * @param data - An object containing the fields to update.
+   * Combines two partial types:
+   * - `Partial<Omit<Service, "image">>` for all updatable service fields except `image`.
+   * - `Partial<{ image: Express.Multer.File[] }>` for handling image uploads.
+   *
+   * Note: In the `Service` type, the `image` property is defined as `Image[]`,
+   * where each object includes `public_id`, `url`, and `originalname`.
+   * This method allows replacing or appending images using uploaded files.
+   *
+   * @returns A promise that resolves to the updated service record.
+   */
+  async updateServiceById(
+    id: string,
+    data: Partial<Omit<Service, "image">> &
+      Partial<{ image: Express.Multer.File[] }>
+  ) {
     const service = await this.serviceRepository.getById(id);
 
     if (!service) {
@@ -80,6 +99,16 @@ export default class ServiceServices {
       throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Invalid Request");
     }
 
+    const imageLength =
+      (service?.image?.length ?? 0) + (data?.image?.length ?? 0);
+
+    if (imageLength == 5) {
+      throw new ErrorHandler(
+        STATUSCODE.BAD_REQUEST,
+        "File upload limit exceeded. You can only upload up to 5 files at a time."
+      );
+    }
+
     //Checks if the data sent from the req body is empty or null.
     if (!data || null) {
       throw new ErrorHandler(
@@ -88,6 +117,16 @@ export default class ServiceServices {
       );
     }
 
+    // Initialize a new array to store uploaded image metadata (typed as Image[])
+    let newImages: Image[];
+
+    // Cast the provided image data to an array of Express.Multer.File objects
+    const images = data.image as Express.Multer.File[];
+
+    // Use the async helper `uploadImage`, which uploads files to Cloudinary
+    // and returns an array of objects containing `public_id`, `url`, and `originalname`
+    newImages = await uploadImage(images, []);
+
     /**
      * Verifies that all required fields exist in the given data object, if an unknown field exists it will throw an Error
      * @param fields - An array of required field names to check (e.g. createUserFields).
@@ -95,7 +134,13 @@ export default class ServiceServices {
      */
     verifyFields(createServiceFields, data);
 
-    const result = await this.serviceRepository.updateById(id, data);
+    //Update service record by calling updateById method from `ServiceRepository` class
+    const result = await this.serviceRepository.updateById(id, {
+      ...data,
+      image: newImages,
+    });
+
+    // const result = "Fixing Update Service API";
 
     return result;
   }
