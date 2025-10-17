@@ -4,6 +4,9 @@ import { generateFormattedDate } from "./generateFormattedDate";
 import { logger } from "./logger";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { v2 as cloudinary } from "cloudinary";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -14,6 +17,7 @@ cloudinary.config({
 /**
  * Cloudinary Storage Configuration (v2)
  * -------------------------------------
+ *
  * This configuration integrates Multer with Cloudinary for seamless image uploads.
  * Instead of storing uploaded files locally, this setup automatically uploads them
  * directly to your Cloudinary account.
@@ -73,11 +77,11 @@ const storage = new CloudinaryStorage({
  */
 const fileFilter = (
   req: Express.Request,
-  file: Express.Multer.File,
+  files: Express.Multer.File,
   callback: multer.FileFilterCallback
 ) => {
   // Using JavaScript's "split" method, the file name is divided into an array to extract its file extension.
-  const fileType = file.originalname.split("."); // - ["image", "jpeg"];
+  const fileType = files.originalname.split("."); // - ["image", "jpeg"];
 
   // Define allowed MIME types for image uploads.
   const allowedMimeTypes = [
@@ -91,6 +95,16 @@ const fileFilter = (
     "heif",
     "svg",
   ];
+
+  // Each API request allows a maximum of 5 file uploads.
+  // If the number of files exceeds 5, an error will be thrown.
+  if (req.files?.length == 6) {
+    return callback(
+      new Error(
+        "File upload limit exceeded. You can only upload up to 5 files at a time."
+      )
+    );
+  }
 
   // Reject the file if its MIME type is not in the allowed list.
   // `fileType` - "jpeg".
