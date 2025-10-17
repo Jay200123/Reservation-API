@@ -1,10 +1,11 @@
 import UserRepository from "./repository";
 import UserDetailsRepository from "../user_details/repository";
-import { UserType } from "../../@types";
+import { UserType, Image } from "../../@types";
 import {
   ErrorHandler,
   logger,
   updateUserFields,
+  uploadImage,
   verifyFields,
 } from "../../@utils";
 import mongoose from "mongoose";
@@ -74,7 +75,11 @@ export default class UserService {
    * @param data  - user details
    * @returns result
    */
-  async updateUser(id: string, data: Partial<UserType>) {
+  async updateUser(
+    id: string,
+    data: Partial<Omit<UserType, "image">> &
+      Partial<{ image: Express.Multer.File[] }>
+  ) {
     if (id == ":id") {
       throw new ErrorHandler(400, "Missing user ID");
     }
@@ -100,7 +105,16 @@ export default class UserService {
      */
     verifyFields(updateUserFields, data);
 
-    const result = await this.userDetailsRepository.updateById(id, data);
+    let newImages: Image[];
+
+    const images = data.image as Express.Multer.File[];
+
+    newImages = await uploadImage(images, []);
+
+    const result = await this.userDetailsRepository.updateById(id, {
+      ...data,
+      image: newImages,
+    });
 
     return result;
   }
