@@ -51,7 +51,10 @@ export default class ServiceController {
 
     validateFields(req);
 
-    const result = await this.serviceServices.createService(req.body);
+    const result = await this.serviceServices.createService({
+      ...req.body,
+      image: req.files,
+    });
 
     logger.info({
       CREATE_SERVICE_RESPONSE: {
@@ -74,10 +77,10 @@ export default class ServiceController {
       },
     });
 
-    const result = await this.serviceServices.updateServiceById(
-      req.params.id,
-      req.body
-    );
+    const result = await this.serviceServices.updateServiceById(req.params.id, {
+      ...req.body,
+      image: req.files,
+    });
 
     logger.info({
       UPDATE_SERVICE_BY_ID_REQUEST: {
