@@ -9,7 +9,7 @@ const createUserFields = [
   "image",
 ];
 
-const updateUserFields = ["contact_number", "address", "city"];
+const updateUserFields = ["contact_number", "address", "city", "image"];
 
 const createServiceFields = [
   "service_name",
