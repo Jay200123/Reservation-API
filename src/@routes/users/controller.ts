@@ -49,7 +49,10 @@ export default class UserController {
       },
     });
 
-    const result = await this.userService.updateUser(req.params.id, req.body);
+    const result = await this.userService.updateUser(req.params.id, {
+      ...req.body,
+      image: req.files,
+    });
 
     logger.info({
       UPDATE_USER_RESPONSE: {
