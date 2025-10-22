@@ -32,16 +32,12 @@ const authMiddleware = new AuthMiddleware(
 //get all timeslots endpoint.
 router.get(
   PATH.TIMESLOTS,
-  authMiddleware.AccessTokenVerifier(),
-  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   timeslotController.getAllTimeslots
 );
 
 //get timeslot by id endpoint.
 router.get(
   PATH.TIMESLOT_ID,
-  authMiddleware.AccessTokenVerifier(),
-  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   timeslotController.getAllTimeslotById
 );
 
