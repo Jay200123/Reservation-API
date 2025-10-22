@@ -34,8 +34,6 @@ router.get(PATH.SERVICES, serviceController.getAllServices);
 //get one user endpoint.
 router.get(
   PATH.SERVICE_ID,
-  authMiddleware.AccessTokenVerifier(),
-  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   serviceController.getServiceById
 );
 
