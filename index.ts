@@ -6,7 +6,6 @@ import { ErrorMiddleware } from "./src/@middleware";
 import { PATH } from "./src/@constants";
 import { users, auth, service, timeslot, reservation } from "./src/@routes";
 import mongoose from "mongoose";
-import axios from "axios";
 import cors from "cors";
 
 dotenv.config();
