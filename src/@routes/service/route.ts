@@ -29,11 +29,16 @@ const authMiddleware = new AuthMiddleware(
 );
 
 //get all users endpoint.
-router.get(PATH.SERVICES, serviceController.getAllServices);
+router.get(
+  PATH.SERVICES,
+  authMiddleware.BasicAuthenticationVerifier(),
+  serviceController.getAllServices
+);
 
 //get one user endpoint.
 router.get(
   PATH.SERVICE_ID,
+  authMiddleware.BasicAuthenticationVerifier(),
   serviceController.getServiceById
 );
 
