@@ -32,12 +32,14 @@ const authMiddleware = new AuthMiddleware(
 //get all timeslots endpoint.
 router.get(
   PATH.TIMESLOTS,
+  authMiddleware.BasicAuthenticationVerifier(),
   timeslotController.getAllTimeslots
 );
 
 //get timeslot by id endpoint.
 router.get(
   PATH.TIMESLOT_ID,
+  authMiddleware.BasicAuthenticationVerifier(),
   timeslotController.getAllTimeslotById
 );
 
