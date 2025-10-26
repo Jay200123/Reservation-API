@@ -63,6 +63,7 @@ export default class ReservationController {
 
     validateFields(req);
 
+
     const result = await this.reservationService.createReservation({
       ...req.body,
     });
