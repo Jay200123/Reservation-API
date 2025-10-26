@@ -200,9 +200,9 @@ export default class ReservationService {
             lastName: fullname[fullname.length - 1],
           },
           redirectUrl: {
-            success: "http://localhost:4000/success",
-            failure: "http://localhost:4000/failure",
-            cancel: "http://localhost:4000/cancel",
+            success: "http://localhost:5173",
+            failure: "http://localhost:5173",
+            cancel: "http://localhost:5173",
           },
           requestReferenceNumber: `ref-${Date.now()}`,
         };
