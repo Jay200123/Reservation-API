@@ -311,4 +311,29 @@ export default class ReservationService {
 
     return result;
   }
+
+  async getUserReservationsByUserId(user_id: string) {
+    const result = await this.reservationRepository.getReservationsByUserId(
+      user_id
+    );
+
+    if (user_id == ":user_id") {
+      throw new ErrorHandler(404, "Missing User ID");
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(user_id)) {
+      logger.info({
+        GET_RESERVATIONS_BY_USER_ID_ERROR: {
+          message: "Invalid Mongoose ID",
+        },
+      });
+      throw new ErrorHandler(400, "Invalid Request");
+    }
+
+    if (!result.length) {
+      throw new ErrorHandler(404, "Reservations Not Found");
+    }
+
+    return result;
+  }
 }
