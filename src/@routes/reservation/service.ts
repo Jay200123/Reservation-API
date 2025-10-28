@@ -318,7 +318,7 @@ export default class ReservationService {
     );
 
     if (user_id == ":user_id") {
-      throw new ErrorHandler(404, "Missing User ID");
+      throw new ErrorHandler(STATUSCODE.NOT_FOUND, "Missing User ID");
     }
 
     if (!mongoose.Types.ObjectId.isValid(user_id)) {
@@ -327,11 +327,11 @@ export default class ReservationService {
           message: "Invalid Mongoose ID",
         },
       });
-      throw new ErrorHandler(400, "Invalid Request");
+      throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Invalid Request");
     }
 
     if (!result.length) {
-      throw new ErrorHandler(404, "Reservations Not Found");
+      throw new ErrorHandler(STATUSCODE.NOT_FOUND, "Reservations Not Found");
     }
 
     return result;
