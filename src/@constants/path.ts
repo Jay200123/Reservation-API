@@ -18,4 +18,5 @@ export const PATH = {
   EDIT_RESERVATION_ID: "/reservation/edit/:id",
   EDIT_STATUS_RESERVATION_ID: "/reservation/edit/status/:id",
   RESCHEDULE_RESERVATION_ID: "/reservation/reschedule/:id",
+  GET_RESERVATIONS_BY_USER_ID: "/reservations/:user_id",
 };
