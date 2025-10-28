@@ -93,4 +93,12 @@ router.patch(
   reservationController.updateReservationScheduleById
 );
 
+//retrieve user reservations
+router.get(
+  PATH.GET_RESERVATIONS_BY_USER_ID,
+  authMiddleware.AccessTokenVerifier(),
+  authMiddleware.UserRoleVerifier(ROLE.USER),
+  reservationController.getUserReservationsByUserId
+);
+
 export default router;
