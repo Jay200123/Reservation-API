@@ -42,4 +42,8 @@ export default class ReservationRepository {
       { new: true }
     );
   }
+
+  async getReservationsByUserId(user_id: string) {
+    return await this.ReservationModel.find({ user: user_id });
+  }
 }
