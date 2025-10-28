@@ -63,7 +63,6 @@ export default class ReservationController {
 
     validateFields(req);
 
-
     const result = await this.reservationService.createReservation({
       ...req.body,
     });
@@ -135,6 +134,31 @@ export default class ReservationController {
       STATUSCODE.SUCCESS,
       result,
       "Reservation rescheduled successfully."
+    );
+  };
+
+  getUserReservationsByUserId: MiddlewareFn = async (req, res, next) => {
+    logger.info({
+      GET_RESERVATIONS_BY_USER_ID_REQUEST: {
+        message: "SUCCESS",
+      },
+    });
+
+    const result = await this.reservationService.getUserReservationsByUserId(
+      req.params.user_id
+    );
+
+    logger.info({
+      GET_RESERVATIONS_BY_USER_ID_RESPONSE: {
+        message: "SUCCESS",
+      },
+    });
+
+    return SuccessHandler(
+      res,
+      STATUSCODE.SUCCESS,
+      result,
+      "Reservations retrieved successfully."
     );
   };
 }
