@@ -97,7 +97,7 @@ router.patch(
 router.get(
   PATH.GET_RESERVATIONS_BY_USER_ID,
   authMiddleware.AccessTokenVerifier(),
-  authMiddleware.UserRoleVerifier(ROLE.USER),
+  authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   reservationController.getUserReservationsByUserId
 );
 
