@@ -14,14 +14,21 @@ export default class UserDetailsRepository {
   async getAllUserDetails() {
     return await this.userDetailsModel
       .find()
-      .populate<{ user: Users }>("user")
+      .populate({
+        path: "user",
+        select: "username password status role",
+      })
+      .lean()
       .exec();
   }
 
   async getDetailsByUserId(id: string) {
     return await this.userDetailsModel
       .findOne({ user: id })
-      .populate<{ user: Users }>("user")
+      .populate({
+        path: "user",
+        select: "username password status role",
+      })
       .exec();
   }
 
