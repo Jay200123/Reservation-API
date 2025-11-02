@@ -1,15 +1,48 @@
 import mongoose, { Model } from "mongoose";
-import { Reservations, ReservationStatus, Reschedule } from "../../@types";
+import {
+  Reservations,
+  ReservationStatus,
+  Reschedule,
+  Service,
+} from "../../@types";
 
 export default class ReservationRepository {
   constructor(private ReservationModel: Model<Reservations>) {}
 
   async getAll() {
-    return await this.ReservationModel.find();
+    return await this.ReservationModel.find()
+      .populate({
+        path: "services",
+        select: "service",
+        populate: {
+          path: "service",
+          select: "service_name service_price description duration image",
+        },
+      })
+      .populate({
+        path: "timeslot",
+        select: "start_time end_time",
+      })
+      .lean()
+      .exec();
   }
 
   async getById(id: string) {
-    return await this.ReservationModel.findById(id);
+    return await this.ReservationModel.findById(id)
+      .populate({
+        path: "services",
+        select: "service",
+        populate: {
+          path: "service",
+          select: "service_name service_price description duration image",
+        },
+      })
+      .populate({
+        path: "timeslot",
+        select: "start_time end_time",
+      })
+      .lean()
+      .exec();
   }
 
   async getByTimeslotId(timeslot_id: string) {
@@ -44,6 +77,20 @@ export default class ReservationRepository {
   }
 
   async getReservationsByUserId(user_id: string) {
-    return await this.ReservationModel.find({ user: user_id });
+    return await this.ReservationModel.find({ user: user_id })
+      .populate({
+        path: "services",
+        select: "service",
+        populate: {
+          path: "service",
+          select: "service_name service_price description duration image",
+        },
+      })
+      .populate({
+        path: "timeslot",
+        select: "start_time end_time",
+      })
+      .lean()
+      .exec();
   }
 }
