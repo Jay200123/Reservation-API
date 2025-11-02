@@ -21,6 +21,7 @@ const reservationSchema = new Schema<Reservations>({
 
   timeslot: {
     type: mongoose.Types.ObjectId,
+    ref: RESOURCE.TIMESLOTS,
     required: true,
   },
 
