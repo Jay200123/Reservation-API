@@ -13,6 +13,7 @@ import AuthRepository from "../auth/repository";
 import { JWT } from "../../@utils";
 import { AuthMiddleware } from "../../@middleware";
 import { ROLE } from "../../@constants";
+import { usersParams } from "../../@validations";
 
 const router = express.Router();
 
@@ -41,6 +42,7 @@ const authMiddleware = new AuthMiddleware(
 //get all users endpoint
 router.get(
   PATH.USERS,
+  usersParams,
   authMiddleware.AccessTokenVerifier(),
   authMiddleware.UserRoleVerifier(ROLE.ADMIN),
   userController.getAllUsers
