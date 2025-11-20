@@ -5,6 +5,7 @@ import { RESOURCE } from "../../@constants";
 const reservationSchema = new Schema<Reservations>({
   user: {
     type: mongoose.Types.ObjectId,
+    ref: RESOURCE.USERS,
     required: true,
   },
 
