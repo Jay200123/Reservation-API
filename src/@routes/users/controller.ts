@@ -13,7 +13,12 @@ export default class UserController {
       },
     });
 
-    const result = await this.userService.getAllUsers();
+    validateFields(req);
+
+    const result = await this.userService.getAllUsers(
+      Number(req.params.skip || 0),
+      Number(req.params.limit || 10)
+    );
 
     logger.info({
       GET_ALL_USERS_RESPONSE: {
