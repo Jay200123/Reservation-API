@@ -1,16 +1,15 @@
 import mongoose, { Model } from "mongoose";
-import {
-  Reservations,
-  ReservationStatus,
-  Reschedule,
-  Service,
-} from "../../@types";
+import { Reservations, ReservationStatus, Reschedule } from "../../@types";
 
 export default class ReservationRepository {
   constructor(private ReservationModel: Model<Reservations>) {}
 
   async getAll() {
     return await this.ReservationModel.find()
+      .populate({
+        path: "user",
+        select: "username",
+      })
       .populate({
         path: "services",
         select: "service",
@@ -29,6 +28,10 @@ export default class ReservationRepository {
 
   async getById(id: string) {
     return await this.ReservationModel.findById(id)
+      .populate({
+        path: "user",
+        select: "username",
+      })
       .populate({
         path: "services",
         select: "service",
