@@ -21,8 +21,11 @@ export default class UserService {
    * Retrieve all user records from the database.
    * @returns result
    */
-  async getAllUsers() {
-    const result = await this.userDetailsRepository.getAllUserDetails();
+  async getAllUsers(skip: number, limit: number) {
+    const result = await this.userDetailsRepository.getAllUserDetails(
+      skip,
+      limit
+    );
 
     // Check if users exist
     if (!result.length) {
