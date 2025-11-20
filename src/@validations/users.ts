@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 
 export const createUserValidation = [
   body("username")
@@ -33,7 +33,7 @@ export const createUserValidation = [
     .notEmpty()
     .withMessage("contact_number is required")
     .bail()
-     .matches(/^09\d{9}$/)
+    .matches(/^09\d{9}$/)
     .withMessage("Contact number must start with 09 and be 11 digits long"),
   body("address").trim().escape().notEmpty().withMessage("address is required"),
   body("city").trim().escape().notEmpty().withMessage("city is required"),
@@ -53,4 +53,18 @@ export const loginUserValidation = [
     .bail()
     .isLength({ min: 6 })
     .withMessage("password must be at least 6 characters long"),
+];
+
+export const usersParams = [
+  query("skip")
+    .notEmpty()
+    .withMessage("Missing parameters")
+    .bail()
+    .isInt({ min: 0 })
+    .withMessage("Invalid request"),
+  query("limit")
+    .notEmpty()
+    .withMessage("Missing parameters")
+    .isInt({ min: 0 })
+    .withMessage("Invalid request"),
 ];
