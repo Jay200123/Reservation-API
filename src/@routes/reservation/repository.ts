@@ -4,7 +4,7 @@ import { Reservations, ReservationStatus, Reschedule } from "../../@types";
 export default class ReservationRepository {
   constructor(private ReservationModel: Model<Reservations>) {}
 
-  async getAll() {
+  async getAll(skip: number, limit: number) {
     return await this.ReservationModel.find()
       .populate({
         path: "user",
@@ -22,6 +22,9 @@ export default class ReservationRepository {
         path: "timeslot",
         select: "start_time end_time",
       })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
       .lean()
       .exec();
   }
