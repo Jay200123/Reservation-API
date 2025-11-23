@@ -4,8 +4,14 @@ import { Service } from "../../@types";
 export default class ServiceRepository {
   constructor(private serviceModel: Model<Service>) {}
 
-  async getAll() {
-    return await this.serviceModel.find().exec();
+  async getAll(skip: number, limit: number) {
+    return await this.serviceModel
+      .find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .lean()
+      .exec();
   }
 
   async getById(service_id: string) {
