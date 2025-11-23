@@ -24,8 +24,8 @@ export default class ReservationService {
     private userDetailsRepository: UserDetailsRepository
   ) {}
 
-  async getAllReservations() {
-    const result = await this.reservationRepository.getAll();
+  async getAllReservations(skip: number, limit: number) {
+    const result = await this.reservationRepository.getAll(skip, limit);
 
     if (!result.length) {
       throw new ErrorHandler(STATUSCODE.NOT_FOUND, "Reservations not found");
