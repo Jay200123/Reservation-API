@@ -13,7 +13,12 @@ export default class ServiceController {
       },
     });
 
-    const result = await this.serviceServices.getAllServices();
+    validateFields(req);
+
+    const result = await this.serviceServices.getAllServices(
+      Number(req.params.skip || 0),
+      Number(req.params.limit || 0)
+    );
 
     logger.info({
       GET_ALL_SERVICES_RESPONSE: {
