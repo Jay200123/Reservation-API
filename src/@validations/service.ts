@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 
 export const createServiceValidation = [
   body("service_name")
@@ -20,4 +20,18 @@ export const createServiceValidation = [
     .escape()
     .notEmpty()
     .withMessage("description required"),
+];
+
+export const serviceParams = [
+  query("skip")
+    .notEmpty()
+    .withMessage("Missing parameters")
+    .bail()
+    .isInt({ min: 0 })
+    .withMessage("Invalid request"),
+  query("limit")
+    .notEmpty()
+    .withMessage("Missing parameters")
+    .isInt({ min: 0 })
+    .withMessage("Invalid request"),
 ];
