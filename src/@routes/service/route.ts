@@ -7,7 +7,7 @@ import AuthRepository from "../auth/repository";
 import ServiceRepository from "./repository";
 import ServiceServices from "./service";
 import ServiceController from "./controller";
-import { createServiceValidation } from "../../@validations";
+import { createServiceValidation, serviceParams } from "../../@validations";
 import { JWT } from "../../@utils";
 import { PATH, ROLE } from "../../@constants";
 import { AuthMiddleware } from "../../@middleware";
@@ -31,6 +31,7 @@ const authMiddleware = new AuthMiddleware(
 //get all users endpoint.
 router.get(
   PATH.SERVICES,
+  serviceParams,
   authMiddleware.BasicAuthenticationVerifier(),
   serviceController.getAllServices
 );
