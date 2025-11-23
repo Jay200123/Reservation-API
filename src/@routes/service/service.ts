@@ -12,8 +12,8 @@ import { Service, Image } from "../../@types";
 export default class ServiceServices {
   constructor(private serviceRepository: ServiceRepository) {}
 
-  async getAllServices() {
-    const result = await this.serviceRepository.getAll();
+  async getAllServices(skip: number, limit: number) {
+    const result = await this.serviceRepository.getAll(skip, limit);
 
     if (!result.length) {
       throw new ErrorHandler(STATUSCODE.NOT_FOUND, "Services not found");
