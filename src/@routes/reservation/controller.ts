@@ -13,7 +13,12 @@ export default class ReservationController {
       },
     });
 
-    const result = await this.reservationService.getAllReservations();
+    validateFields(req);
+
+    const result = await this.reservationService.getAllReservations(
+      Number(req.params.skip || 0),
+      Number(req.params.limit || 10)
+    );
 
     logger.info({
       GET_RESERVATIONS_RESPONSE: {
