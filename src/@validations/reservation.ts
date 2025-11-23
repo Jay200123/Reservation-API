@@ -1,4 +1,4 @@
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 
 const createReservationFields = [
   body("user").trim().escape().notEmpty().withMessage("user required"),
@@ -42,6 +42,20 @@ const rescheduleReservationFields = [
     .notEmpty()
     .withMessage("reservation_date required"),
   body("reason").trim().escape().notEmpty().withMessage("reason required"),
+];
+
+export const reservationParams = [
+  query("skip")
+    .notEmpty()
+    .withMessage("Missing parameters")
+    .bail()
+    .isInt({ min: 0 })
+    .withMessage("Invalid request"),
+  query("limit")
+    .notEmpty()
+    .withMessage("Missing parameters")
+    .isInt({ min: 0 })
+    .withMessage("Invalid request"),
 ];
 
 export {
