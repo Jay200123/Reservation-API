@@ -21,6 +21,7 @@ import {
   createReservationFields,
   rescheduleReservationFields,
   updateReservationStatusField,
+  reservationParams,
 } from "../../@validations";
 import { PATH, ROLE } from "../../@constants";
 
@@ -53,6 +54,7 @@ const authMiddleware = new AuthMiddleware(
 //get all reservations endpoint.
 router.get(
   PATH.RESERVATIONS,
+  reservationParams,
   authMiddleware.AccessTokenVerifier(),
   authMiddleware.UserRoleVerifier(ROLE.USER, ROLE.ADMIN),
   reservationController.getAllReservations
