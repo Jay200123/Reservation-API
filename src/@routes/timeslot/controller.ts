@@ -13,7 +13,12 @@ export default class TimeslotController {
       },
     });
 
-    const result = await this.timeslotService.getAllTimeslots();
+    validateFields(req);
+
+    const result = await this.timeslotService.getAllTimeslots(
+      Number(req.params.skip || 0),
+      Number(req.params.limit)
+    );
 
     logger.info({
       GET_ALL_TIMESLOTS_RESPONSE: {
