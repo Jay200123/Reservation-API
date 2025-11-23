@@ -12,8 +12,8 @@ import TimeslotRepository from "./repository";
 export default class TimeslotService {
   constructor(private timeslotRepository: TimeslotRepository) {}
 
-  async getAllTimeslots() {
-    const result = await this.timeslotRepository.getAll();
+  async getAllTimeslots(skip: number, limit: number) {
+    const result = await this.timeslotRepository.getAll(skip, limit);
 
     if (!result.length) {
       throw new ErrorHandler(STATUSCODE.NOT_FOUND, "Timeslots not found");
