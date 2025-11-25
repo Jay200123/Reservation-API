@@ -1,6 +1,6 @@
 import { Image } from "./image";
 
-export type Service = {
+type Service = {
   service_name: string;
   service_price: number;
   description: string;
@@ -9,3 +9,10 @@ export type Service = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+type ServiceFilter = {
+  service_name?: string;
+  service_price?: number;
+};
+
+export { Service, ServiceFilter };
