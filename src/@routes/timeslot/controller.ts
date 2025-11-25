@@ -16,8 +16,8 @@ export default class TimeslotController {
     validateFields(req);
 
     const result = await this.timeslotService.getAllTimeslots(
-      Number(req.params.skip || 0),
-      Number(req.params.limit)
+      Number(req.query.skip || 0),
+      Number(req.query.limit)
     );
 
     logger.info({
