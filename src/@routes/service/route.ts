@@ -7,7 +7,11 @@ import AuthRepository from "../auth/repository";
 import ServiceRepository from "./repository";
 import ServiceServices from "./service";
 import ServiceController from "./controller";
-import { createServiceValidation, serviceParams } from "../../@validations";
+import {
+  createServiceValidation,
+  serviceParams,
+  userServiceParams,
+} from "../../@validations";
 import { JWT } from "../../@utils";
 import { PATH, ROLE } from "../../@constants";
 import { AuthMiddleware } from "../../@middleware";
@@ -34,6 +38,14 @@ router.get(
   serviceParams,
   authMiddleware.BasicAuthenticationVerifier(),
   serviceController.getAllServices
+);
+
+//user services
+router.get(
+  PATH.CUSTOMER_SERVICES,
+  userServiceParams,
+  authMiddleware.BasicAuthenticationVerifier(),
+  serviceController.getUserServices
 );
 
 //get one user endpoint.
