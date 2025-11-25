@@ -1,5 +1,5 @@
 import { Model } from "mongoose";
-import { Service } from "../../@types";
+import { Service, ServiceFilter } from "../../@types";
 
 export default class ServiceRepository {
   constructor(private serviceModel: Model<Service>) {}
@@ -32,5 +32,21 @@ export default class ServiceRepository {
 
   async deleteById(service_id: string) {
     return await this.serviceModel.findByIdAndDelete(service_id);
+  }
+
+  async getAllUserServices(filter: [], skip: number, limit: number) {
+
+    console.log(filter);
+    
+    if (filter.length > 0) {
+      return await this.serviceModel
+        .find({ $or: filter })
+        .skip(skip)
+        .limit(limit)
+        .lean()
+        .exec();
+    }
+
+    return await this.serviceModel.find().skip(skip).limit(limit).lean().exec();
   }
 }
