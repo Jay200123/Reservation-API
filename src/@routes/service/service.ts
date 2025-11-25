@@ -8,7 +8,7 @@ import {
 } from "../../@utils";
 import { STATUSCODE } from "../../@constants";
 import mongoose from "mongoose";
-import { Service, Image } from "../../@types";
+import { Service, Image, ServiceFilter } from "../../@types";
 export default class ServiceServices {
   constructor(private serviceRepository: ServiceRepository) {}
 
@@ -147,6 +147,37 @@ export default class ServiceServices {
 
   async deleteServiceById(service_id: string) {
     const result = await this.serviceRepository.deleteById(service_id);
+
+    return result;
+  }
+
+  async getUserServices(filter: ServiceFilter, skip: number, limit: number) {
+    const serviceFilter: any = [];
+
+    if (filter.service_name !== "") {
+      serviceFilter.push({
+        service_name: {
+          $regex: filter.service_name,
+          $options: "i",
+        },
+      });
+    }
+
+    if (filter.service_price !== 0) {
+      serviceFilter.push({
+        service_price: Number(filter.service_price),
+      });
+    }
+
+    const result = await this.serviceRepository.getAllUserServices(
+      serviceFilter,
+      skip,
+      limit
+    );
+
+    if (!result.length) {
+      throw new ErrorHandler(STATUSCODE.NOT_FOUND, "Services not found");
+    }
 
     return result;
   }
