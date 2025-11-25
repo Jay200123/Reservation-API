@@ -16,8 +16,8 @@ export default class ServiceController {
     validateFields(req);
 
     const result = await this.serviceServices.getAllServices(
-      Number(req.params.skip || 0),
-      Number(req.params.limit || 0)
+      Number(req.query.skip || 0),
+      Number(req.query.limit || 0)
     );
 
     logger.info({
@@ -114,6 +114,37 @@ export default class ServiceController {
 
     logger.info({
       DELETE_SERVICE_BY_ID_REQUEST: {
+        message: "SUCCESS",
+      },
+    });
+
+    return SuccessHandler(res, STATUSCODE.SUCCESS, result, "Success");
+  };
+
+  getUserServices: MiddlewareFn = async (req, res, next) => {
+    logger.info({
+      GET_USER_SERVICES_REQUEST: {
+        message: "SUCCESS",
+      },
+    });
+
+    validateFields(req);
+
+    const result = await this.serviceServices.getUserServices(
+      //filter object
+      {
+        service_name: String(req.query.service_name) || "",
+        service_price: Number(req.query.service_price) || 0,
+      },
+
+      //skip
+      Number(req.query.skip || 0),
+      //limit
+      Number(req.query.limit || 10)
+    );
+
+    logger.info({
+      GET_USER_SERVICES_RESPONSE: {
         message: "SUCCESS",
       },
     });
