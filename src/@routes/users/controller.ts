@@ -16,8 +16,8 @@ export default class UserController {
     validateFields(req);
 
     const result = await this.userService.getAllUsers(
-      Number(req.params.skip || 0),
-      Number(req.params.limit || 10)
+      Number(req.query.skip || 0),
+      Number(req.query.limit || 10)
     );
 
     logger.info({
