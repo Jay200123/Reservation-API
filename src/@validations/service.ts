@@ -37,12 +37,12 @@ const serviceParams = [
 ];
 
 const userServiceParams = [
-  query("service_name").notEmpty().withMessage("missing service_name"),
-  query("service_price")
-    .notEmpty()
-    .withMessage("Missing parameters")
-    .isInt({ min: 0 })
-    .withMessage("Invalid request"),
+  // query("service_name").notEmpty().withMessage("missing service_name"),
+  // query("service_price")
+  //   .notEmpty()
+  //   .withMessage("Missing parameters")
+  //   .isInt({ min: 0 })
+  //   .withMessage("Invalid request"),
   query("skip")
     .notEmpty()
     .withMessage("Missing parameters")
