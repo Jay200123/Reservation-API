@@ -7,7 +7,7 @@ export default class ServiceRepository {
   async getAll(skip: number, limit: number) {
     return await this.serviceModel
       .find()
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: 1 })
       .skip(skip)
       .limit(limit)
       .lean()
@@ -35,18 +35,22 @@ export default class ServiceRepository {
   }
 
   async getAllUserServices(filter: [], skip: number, limit: number) {
-
-    console.log(filter);
-    
     if (filter.length > 0) {
+      console.log("has Filter!");
       return await this.serviceModel
         .find({ $or: filter })
         .skip(skip)
         .limit(limit)
         .lean()
         .exec();
+    } else {
+      console.log("has no Filter");
+      return await this.serviceModel
+        .find()
+        .skip(skip)
+        .limit(limit)
+        .lean()
+        .exec();
     }
-
-    return await this.serviceModel.find().skip(skip).limit(limit).lean().exec();
   }
 }
