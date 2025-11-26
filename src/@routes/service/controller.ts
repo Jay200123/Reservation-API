@@ -17,7 +17,7 @@ export default class ServiceController {
 
     const result = await this.serviceServices.getAllServices(
       Number(req.query.skip || 0),
-      Number(req.query.limit || 0)
+      Number(req.query.limit || 10)
     );
 
     logger.info({
@@ -55,6 +55,9 @@ export default class ServiceController {
     });
 
     validateFields(req);
+
+    console.log("Checking Files");
+    console.log(req.files);
 
     const result = await this.serviceServices.createService({
       ...req.body,
