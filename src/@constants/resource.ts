@@ -6,4 +6,5 @@ export const RESOURCE = {
   USER_CREDENTIALS: "user_credentials",
   SERVICES: "services",
   TIMESLOTS: "timeslots",
+  RATINGS: "ratings",
 };
