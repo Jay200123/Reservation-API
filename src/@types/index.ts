@@ -5,5 +5,6 @@ export * from "./models/service";
 export * from "./models/timeslots";
 export * from "./models/reservations";
 export * from "./models/image";
+export * from "./models/ratings";
 export * from "./middleware/index";
 export * from "./file";
