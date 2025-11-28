@@ -1,5 +1,5 @@
 import { Model } from "mongoose";
-import { Service, ServiceFilter } from "../../@types";
+import { Service } from "../../@types";
 
 export default class ServiceRepository {
   constructor(private serviceModel: Model<Service>) {}
