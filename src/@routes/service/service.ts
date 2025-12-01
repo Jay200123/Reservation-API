@@ -88,6 +88,13 @@ export default class ServiceServices {
     data: Partial<Omit<Service, "image">> &
       Partial<{ image: Express.Multer.File[] }>
   ) {
+    /**
+     * Verifies that all required fields exist in the given data object, if an unknown field exists it will throw an Error
+     * @param fields - An array of required field names to check (e.g. createUserFields).
+     * @param data - The object to validate, typically req.body.
+     */
+    verifyFields(createServiceFields, data);
+
     const service = await this.serviceRepository.getById(id);
 
     if (!service) {
@@ -123,8 +130,10 @@ export default class ServiceServices {
     // Cast the provided image data to an array of Express.Multer.File objects
     const images = data.image as Express.Multer.File[];
 
-    // Use the async helper `uploadImage`, which uploads files to Cloudinary
-    // and returns an array of objects containing `public_id`, `url`, and `originalname`
+    /**
+     *  Use the async helper `uploadImage`, which uploads files to Cloudinary
+     *  and returns an array of objects containing `public_id`, `url`, and `originalname`
+     */
     newImages = await uploadImage(images, []);
 
     /**
@@ -139,8 +148,6 @@ export default class ServiceServices {
       ...data,
       image: newImages,
     });
-
-    // const result = "Fixing Update Service API";
 
     return result;
   }
