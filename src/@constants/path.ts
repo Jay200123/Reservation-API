@@ -20,4 +20,7 @@ export const PATH = {
   RESCHEDULE_RESERVATION_ID: "/reservation/reschedule/:id",
   GET_RESERVATIONS_BY_USER_ID: "/reservations/:user_id",
   CUSTOMER_SERVICES: "/customer/services",
+  RATINGS: "/ratings",
+  RATING_ID: "/rating/:id",
+  EDIT_RATING_ID: "/rating/edit/:id",
 };
