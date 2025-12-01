@@ -12,7 +12,7 @@ export default class RatingsRepository {
     return await this.RatingsModel.findById(id).lean().exec();
   }
 
-  async create(data: Ratings) {
+  async create(data: Omit<Ratings, "createdAt" | "updatedAt">) {
     return await this.RatingsModel.create({ ...data });
   }
 
