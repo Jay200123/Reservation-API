@@ -4,7 +4,14 @@ import { Database, corsOptions } from "./src/@config";
 import { logger, upload } from "./src/@utils";
 import { ErrorMiddleware } from "./src/@middleware";
 import { PATH } from "./src/@constants";
-import { users, auth, service, timeslot, reservation } from "./src/@routes";
+import {
+  users,
+  auth,
+  service,
+  timeslot,
+  reservation,
+  rating,
+} from "./src/@routes";
 import mongoose from "mongoose";
 import cors from "cors";
 
@@ -59,15 +66,15 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-
 // Set up the base route for all API v1 endpoints
 app.use(
-  PATH.API, 
-  auth, 
-  users, 
-  service, 
-  timeslot, 
-  reservation
+  PATH.API, // - "/api/v1"
+  auth,
+  users,
+  service,
+  timeslot,
+  reservation,
+  rating
 );
 
 app.all("/*splat", (req: Request, res: Response) => {
