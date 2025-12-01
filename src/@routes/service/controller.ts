@@ -56,9 +56,6 @@ export default class ServiceController {
 
     validateFields(req);
 
-    console.log("Checking Files");
-    console.log(req.files);
-
     const result = await this.serviceServices.createService({
       ...req.body,
       image: req.files,
