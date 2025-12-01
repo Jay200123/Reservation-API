@@ -116,9 +116,10 @@ export default class UserService {
     // The `uploadImage` utility only accepts this type for file uploads.
     const images = data.image as Express.Multer.File[];
 
-    // Pass the files from the request to the `uploadImage` utility for Cloudinary upload.
-    // When the upload completes, `uploadImage` returns an array of objects containing
-    // the `public_id`, `url`, and `originalname` of each uploaded file.
+    /**
+     * Pass the files from the request to the `uploadImage` utility for Cloudinary upload.
+     * When the upload completes, `uploadImage` returns an array of objects containing  the `public_id`, `url`, and `originalname` of each uploaded file.
+     */
     newImages = await uploadImage(images, []);
 
     const result = await this.userDetailsRepository.updateById(id, {
