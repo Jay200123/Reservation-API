@@ -25,7 +25,7 @@ const ratingSchema = new Schema<Ratings>({
     required: true,
   },
 
-  images: [
+  image: [
     {
       public_id: String,
       url: String,
