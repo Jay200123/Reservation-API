@@ -33,6 +33,16 @@ const createReservationFields = [
 
 const rescheduleFields = ["timeslot", "reservation_date", "reason"];
 
+const createRatingsField = [
+  "user",
+  "service",
+  "description",
+  "rating",
+  "image",
+];
+
+const updateRatingsField = ["description", "rating"];
+
 export {
   createUserFields,
   updateUserFields,
@@ -40,4 +50,6 @@ export {
   createTimeslotFields,
   createReservationFields,
   rescheduleFields,
+  createRatingsField,
+  updateRatingsField,
 };
