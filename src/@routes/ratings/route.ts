@@ -14,6 +14,7 @@ import RatingsController from "./controller";
 import { AuthMiddleware } from "../../@middleware";
 import { JWT } from "../../@utils";
 import { PATH } from "../../@constants";
+import { createRatingField } from "../../@validations";
 
 const router = express.Router();
 
@@ -62,6 +63,7 @@ router.post(
 // update rating by id endpoint
 router.patch(
   PATH.EDIT_RATING_ID,
+  createRatingField,
   authMiddleware.AccessTokenVerifier(),
   ratingsController.updateRatingById
 );
