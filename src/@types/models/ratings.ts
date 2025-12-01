@@ -8,7 +8,7 @@ type Ratings = {
   service: mongoose.Types.ObjectId | Service;
   description: string;
   rating: number;
-  images: Image[];
+  image: Image[];
   createdAt: Date;
   updatedAt: Date;
 };
