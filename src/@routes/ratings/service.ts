@@ -97,7 +97,7 @@ export default class RatingsService {
     if (!service) {
       logger.info({
         CREATE_RATING_REQUEST_ERROR: {
-          message: "User Not Found",
+          message: "Service Not Found",
         },
       });
       throw new ErrorHandler(STATUSCODE.BAD_REQUEST, "Invalid Request");
