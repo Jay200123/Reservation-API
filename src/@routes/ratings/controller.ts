@@ -52,8 +52,13 @@ export default class RatingsController {
       },
     });
 
+    // Validate request fields
+    validateFields(req);
+
     const result = await this.ratingsService.addRating({
       ...req.body,
+      rating: Number(req.body.rating),
+      image: req.files,
     });
 
     logger.info({
