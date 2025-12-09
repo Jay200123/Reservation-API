@@ -13,8 +13,8 @@ import RatingsService from "./service";
 import RatingsController from "./controller";
 import { AuthMiddleware } from "../../@middleware";
 import { JWT } from "../../@utils";
-import { PATH } from "../../@constants";
-import { createRatingField } from "../../@validations";
+import { PATH, ROLE } from "../../@constants";
+import { createRatingField, updateRatingFields } from "../../@validations";
 
 const router = express.Router();
 
@@ -42,35 +42,39 @@ const authMiddleware = new AuthMiddleware(
 //get all ratings endpoint
 router.get(
   PATH.RATINGS,
-  authMiddleware.AccessTokenVerifier(),
+  authMiddleware.BasicAuthenticationVerifier(),
   ratingsController.getAllRatings
 );
 
 // get rating by id endpoint
 router.get(
   PATH.RATING_ID,
-  authMiddleware.AccessTokenVerifier(),
+  authMiddleware.BasicAuthenticationVerifier(),
   ratingsController.getRatingById
 );
 
 // add rating endpoint
 router.post(
-  PATH.RATING_ID,
+  PATH.RATINGS,
+  authMiddleware.UserRoleVerifier(ROLE.USER),
   authMiddleware.AccessTokenVerifier(),
+  createRatingField,
   ratingsController.addRating
 );
 
 // update rating by id endpoint
 router.patch(
   PATH.EDIT_RATING_ID,
-  createRatingField,
+  authMiddleware.UserRoleVerifier(ROLE.USER),
   authMiddleware.AccessTokenVerifier(),
+  updateRatingFields,
   ratingsController.updateRatingById
 );
 
 // delete rating by id endpoint
 router.patch(
   PATH.RATING_ID,
+  authMiddleware.UserRoleVerifier(ROLE.USER),
   authMiddleware.AccessTokenVerifier(),
   ratingsController.deleteRatingById
 );
