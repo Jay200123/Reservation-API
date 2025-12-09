@@ -18,4 +18,23 @@ const createRatingField = [
     .withMessage("rating must be 0 or greater"),
 ];
 
-export { createRatingField };
+const updateRatingFields = [
+  body("description")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("description required"),
+  body("rating")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("rating required")
+    .bail()
+    .isFloat({ min: 0 })
+    .withMessage("rating must be 0 or greater"),
+];
+
+export { 
+  createRatingField, 
+  updateRatingFields
+};
