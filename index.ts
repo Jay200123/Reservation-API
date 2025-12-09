@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { Database, corsOptions } from "./src/@config";
-import { logger, upload } from "./src/@utils";
+import { logger, upload, hashPassword } from "./src/@utils";
 import { ErrorMiddleware } from "./src/@middleware";
 import { PATH } from "./src/@constants";
 import {
@@ -14,6 +14,7 @@ import {
 } from "./src/@routes";
 import mongoose from "mongoose";
 import cors from "cors";
+import Settings from "./src/@routes/settings/model";
 
 dotenv.config();
 const app = express();
@@ -76,6 +77,29 @@ app.use(
   reservation,
   rating
 );
+
+app.post("/add-basic", async (req, res, next) => {
+  const password = await hashPassword(req.body.settings_password);
+
+  const result = await Settings.create({
+    settings_username: req.body.settings_username,
+    settings_password: password,
+  });
+
+  return res.status(201).json({
+    data: result,
+    message: "Basic Credentials added successfully.",
+  });
+});
+
+app.delete("/wipe-database", async (req, res, next) => {
+  const result = await mongoose.connection.dropDatabase();
+
+  return res.status(200).json({
+    data: result,
+    message: "Collections dropped successfully.",
+  });
+});
 
 app.all("/*splat", (req: Request, res: Response) => {
   return res.status(405).json({
