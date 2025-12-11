@@ -1,6 +1,5 @@
 import RatingsRepository from "./repository";
 import UserRepository from "../users/repository";
-import ServiceRepository from "../service/repository";
 import {
   ErrorHandler,
   logger,
@@ -12,11 +11,12 @@ import {
 import { STATUSCODE } from "../../@constants";
 import mongoose from "mongoose";
 import { Image, Ratings } from "../../@types";
+import ReservationRepository from "../reservation/repository";
 export default class RatingsService {
   constructor(
     private ratingsRepository: RatingsRepository,
     private userRepository: UserRepository,
-    private serviceRepository: ServiceRepository
+    private reservationRepository: ReservationRepository
   ) {}
 
   async getAllRatings(skip: number, limit: number) {
@@ -90,11 +90,11 @@ export default class RatingsService {
      * Validates whether the service exists in the database.
      * Throws an error if the retrieved `service` object is empty.
      */
-    const service = await this.serviceRepository.getById(
-      data.service.toString()
+    const reservation = await this.reservationRepository.getById(
+      data.reservation.toString()
     );
 
-    if (!service) {
+    if (!reservation) {
       logger.info({
         CREATE_RATING_REQUEST_ERROR: {
           message: "Service Not Found",
