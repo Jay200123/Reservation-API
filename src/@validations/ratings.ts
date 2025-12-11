@@ -2,7 +2,11 @@ import { body } from "express-validator";
 
 const createRatingField = [
   body("user").trim().escape().notEmpty().withMessage("user required"),
-  body("service").trim().escape().notEmpty().withMessage("service required"),
+  body("reservation")
+    .trim()
+    .escape()
+    .notEmpty()
+    .withMessage("reservation required"),
   body("description")
     .trim()
     .escape()
@@ -34,7 +38,4 @@ const updateRatingFields = [
     .withMessage("rating must be 0 or greater"),
 ];
 
-export { 
-  createRatingField, 
-  updateRatingFields
-};
+export { createRatingField, updateRatingFields };
