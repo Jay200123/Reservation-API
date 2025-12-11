@@ -11,6 +11,7 @@ import {
   timeslot,
   reservation,
   rating,
+  dashboard,
 } from "./src/@routes";
 import mongoose from "mongoose";
 import cors from "cors";
@@ -75,7 +76,8 @@ app.use(
   service,
   timeslot,
   reservation,
-  rating
+  rating,
+  dashboard
 );
 
 app.post("/add-basic", async (req, res, next) => {
