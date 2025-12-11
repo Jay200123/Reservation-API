@@ -9,9 +9,9 @@ const ratingSchema = new Schema<Ratings>({
     required: true,
   },
 
-  service: {
+  reservation: {
     type: mongoose.Types.ObjectId,
-    ref: RESOURCE.SERVICES,
+    ref: RESOURCE.RESERVATIONS,
     required: true,
   },
 
