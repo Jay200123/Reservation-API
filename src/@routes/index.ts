@@ -17,3 +17,4 @@ export { default as service } from "./service/route";
 export { default as timeslot } from "./timeslot/route";
 export { default as reservation } from "./reservation/route";
 export { default as rating } from "./ratings/route";
+export { default as dashboard } from "./dashboard/route";

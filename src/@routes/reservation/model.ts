@@ -26,6 +26,11 @@ const reservationSchema = new Schema<Reservations>({
     required: true,
   },
 
+  ratings: {
+    type: mongoose.Types.ObjectId,
+    ref: RESOURCE.RATINGS,
+  },
+
   payment_type: {
     type: String,
     enum: ["CASH", "ONLINE_PAYMENT"],

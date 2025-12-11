@@ -7,10 +7,10 @@ import Settings from "../settings/model";
 import SettingsRepository from "../settings/repository";
 import UserCredentials from "../auth/model";
 import AuthRepository from "../auth/repository";
-import Service from "../service/model";
-import ServiceRepository from "../service/repository";
 import RatingsService from "./service";
 import RatingsController from "./controller";
+import Reservation from "../reservation/model";
+import ReservationRepository from "../reservation/repository";
 import { AuthMiddleware } from "../../@middleware";
 import { JWT } from "../../@utils";
 import { PATH, ROLE } from "../../@constants";
@@ -20,12 +20,12 @@ const router = express.Router();
 
 const ratingRepository = new RatingsRepository(Ratings);
 const userRepository = new UserRepository(User);
-const serviceRepository = new ServiceRepository(Service);
+const reservationRepository = new ReservationRepository(Reservation);
 
 const ratingsService = new RatingsService(
   ratingRepository,
   userRepository,
-  serviceRepository
+  reservationRepository
 );
 
 const ratingsController = new RatingsController(ratingsService);

@@ -5,11 +5,33 @@ export default class RatingsRepository {
   constructor(private RatingsModel: Model<Ratings>) {}
 
   async getAll(skip: number, limit: number) {
-    return await this.RatingsModel.find().skip(skip).limit(limit).lean().exec();
+    return await this.RatingsModel.find()
+      .populate({
+        path: "user",
+        select: "username",
+      })
+      // .populate({
+      //   path: "service",
+      //   select: "service_name service_price description duration",
+      // })
+      .skip(skip)
+      .limit(limit)
+      .lean()
+      .exec();
   }
 
   async getById(id: string) {
-    return await this.RatingsModel.findById(id).lean().exec();
+    return await this.RatingsModel.findById(id)
+      .populate({
+        path: "user",
+        select: "username",
+      })
+      // .populate({
+      //   path: "service",
+      //   select: "service_name service_price description duration",
+      // })
+      .lean()
+      .exec();
   }
 
   async create(data: Omit<Ratings, "createdAt" | "updatedAt">) {
