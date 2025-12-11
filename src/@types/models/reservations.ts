@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { Users } from "./user";
 import { Service } from "./service";
 import { Timeslot } from "./timeslots";
+import { Ratings } from "./ratings";
 
 type PaymentType = "CASH" | "ONLINE_PAYMENT";
 type ReservationStatus = "PENDING" | "RESCHEDULED" | "ONGOING" | "FINISHED";
@@ -13,6 +14,7 @@ type Reservations = {
   user: mongoose.Types.ObjectId | Users;
   services: ServiceReservations[];
   timeslot: mongoose.Types.ObjectId | Timeslot;
+  ratings: mongoose.Types.ObjectId | Ratings;
   payment_type: PaymentType;
   status: ReservationStatus;
   amount: number;
