@@ -1,3 +1,10 @@
+/**
+ * @PATH
+ * Centralized API route path constants.
+ *
+ * Used to avoid hard-coded endpoint strings across the application
+ * and ensure clean & consistent API routes constructions.
+ */
 export const PATH = {
   API: "/api/v1",
   REGISTER: "/register",
@@ -23,4 +30,5 @@ export const PATH = {
   RATINGS: "/ratings",
   RATING_ID: "/rating/:id",
   EDIT_RATING_ID: "/rating/edit/:id",
+  USER_ROLE_DASHBOARD: "/user-role/dashboard",
 };
