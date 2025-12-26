@@ -1142,7 +1142,7 @@ Builds fresh images (using the Dockerfile) and starts new containers in **detach
 ### PayMaya Sandbox Test Card Payment Credentials
 
 - **Card Number:** `5123456789012346`
-- **Expiry Month & Year:** `12/25`
+- **Expiry Month & Year:** `12/30`
 - **CSC/CVV**: `111`
 
 ### Notes
