@@ -1,3 +1,11 @@
+/**
+ * Centralized HTTP status code constants.
+ *
+ * Used to standardize API responses, avoid magic numbers,
+ * and improve readability and consistency across controllers
+ * and middleware.
+ */
+
 export const STATUSCODE = {
   SUCCESS: 200,
   CREATED: 201,
