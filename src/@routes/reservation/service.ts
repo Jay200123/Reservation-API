@@ -180,6 +180,8 @@ export default class ReservationService {
         totalAmount += service.service_price;
       }
 
+      // Initialize the payment variable.
+      // This object will store payment details returned by Maya.
       let payment = {} as any;
 
       //Paymaya logic
@@ -200,15 +202,17 @@ export default class ReservationService {
             lastName: fullname[fullname.length - 1],
           },
           redirectUrl: {
-            success: "http://localhost:5173",
-            failure: "http://localhost:5173",
-            cancel: "http://localhost:5173",
+            success: "http://localhost:80",
+            failure: "http://localhost:80",
+            cancel: "http://localhost:80",
           },
           requestReferenceNumber: `ref-${Date.now()}`,
         };
 
         payment = await paymayaCheckout(payload);
       }
+
+      console.log({ payment });
 
       const result = await this.reservationRepository.create({
         ...data,
