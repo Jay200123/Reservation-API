@@ -1,38 +1,47 @@
 import express from "express";
 import User from "../users/model";
-import UserRepository from "../users/repository";
 import Service from "../service/model";
-import ServiceRepository from "../service/repository";
 import Ratings from "../ratings/model";
-import RatingsRepository from "../ratings/repository";
 import Reservation from "../reservation/model";
-import ReservationRepository from "../reservation/repository";
-import Timeslot from "../timeslot/model";
-import TimeslotRepository from "../timeslot/repository";
 import DashboardService from "./service";
 import DashboardController from "./controller";
+import DashboardRepository from "./repository";
+import { PATH, ROLE } from "../../@constants";
+import Settings from "../settings/model";
+import SettingsRepository from "../settings/repository";
+import UserCredentials from "../auth/model";
+import AuthRepository from "../auth/repository";
+import { JWT } from "../../@utils";
+import { AuthMiddleware } from "../../@middleware";
 
 const router = express.Router();
 
-const userRepository = new UserRepository(User);
-const serviceRepository = new ServiceRepository(Service);
-const ratingsRepository = new RatingsRepository(Ratings);
-const reservationRepository = new ReservationRepository(Reservation);
-const timeslotRepository = new TimeslotRepository(Timeslot);
-
-const dashboardService = new DashboardService(
-  userRepository,
-  serviceRepository,
-  ratingsRepository,
-  reservationRepository,
-  timeslotRepository
+const dashboardRepository = new DashboardRepository(
+  User,
+  Service,
+  Reservation,
+  Ratings
 );
 
+const dashboardService = new DashboardService(dashboardRepository);
+
 const dashboardController = new DashboardController(dashboardService);
-//   private usersRepository: UserRepository,
-//     private serviceRepository: ServiceRepository,
-//     private ratingsRepository: RatingsRepository,
-//     private reservationRepository: ReservationRepository,
-//     private timeslotRepository: TimeslotRepository
+
+const settingsRepository = new SettingsRepository(Settings);
+const authRepository = new AuthRepository(UserCredentials);
+
+const authMiddleware = new AuthMiddleware(
+  settingsRepository,
+  authRepository,
+  new JWT()
+);
+
+//`user role dashboard` endpoint.
+router.get(
+  PATH.USER_ROLE_DASHBOARD,
+  authMiddleware.UserRoleVerifier(ROLE.ADMIN),
+  authMiddleware.AccessTokenVerifier(),
+  dashboardController.GetUserRoleDashboard
+);
 
 export default router;
